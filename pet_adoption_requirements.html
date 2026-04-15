@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pet Adoption Platform - Requirements Specification</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background-color: #111827;
+        color: #f3f4f6;
+      }
+
+      .container {
+        width: 95%;
+        max-width: 1600px;
+        margin: 0 auto;
+        background-color: #1f2937;
+        padding: 32px;
+        border-radius: 10px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: #ffffff;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      h2 {
+        margin-top: 32px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #374151;
+      }
+
+      h3 {
+        margin-top: 24px;
+        color: #d1d5db;
+      }
+
+      p {
+        color: #d1d5db;
+      }
+
+      .section {
+        margin-bottom: 28px;
+        padding: 20px;
+        background-color: #273548;
+        border-radius: 8px;
+      }
+
+      ul {
+        padding-left: 22px;
+      }
+
+      li {
+        margin-bottom: 8px;
+      }
+
+      .fr-item {
+        margin-bottom: 22px;
+        padding-bottom: 12px;
+        border-bottom: 1px dashed #374151;
+      }
+
+      .code-like {
+        background-color: #374151;
+        color: #f9fafb;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+
+      .name-line {
+        letter-spacing: 1px;
+        color: #e5e7eb;
+      }
+
+      .priority-title {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        color: #ffffff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        color: #f3f4f6;
+      }
+
+      th,
+      td {
+        border: 1px solid #374151;
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background-color: #374151;
+      }
+
+      .mono-block {
+        background-color: #111827;
+        color: #f9fafb;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Pet Adoption Platform - Requirements Specification</h1>
+
+      <div class="section">
+        <h2>1. Project Title</h2>
+        <p><strong>Pet Adoption Platform</strong></p>
+      </div>
+
+      <div class="section">
+        <h2>2. Purpose</h2>
+        <p>
+          The purpose of this platform is to connect animal shelters and
+          adoption agencies with potential adopters through a centralized web
+          application. Users can browse available pets, submit adoption
+          applications, and manage their profile. Shelters and administrators
+          can manage pet listings, review applications, and moderate platform
+          content.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>3. Scope</h2>
+        <ul>
+          <li>Public pet browsing and search</li>
+          <li>User registration and authentication</li>
+          <li>Profile management</li>
+          <li>Adoption application workflow</li>
+          <li>Shelter / agency pet and application management</li>
+          <li>Admin oversight and moderation</li>
+          <li>Public comments on animals managed by the shelter or admin</li>
+          <li>Optional advanced features such as messaging and resource library</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>4. User Roles</h2>
+
+        <h3>4.1 Public Visitor</h3>
+        <p>A visitor who is not logged in.</p>
+
+        <h3>4.2 Registered User / Adopter</h3>
+        <p>
+          A logged-in user who can browse pets, manage their profile, and submit
+          adoption applications.
+        </p>
+
+        <h3>4.3 Shelter / Adoption Agency</h3>
+        <p>
+          An organization account or staff member that can create pet listings,
+          manage animal information, and review adoption applications.
+        </p>
+
+        <h3>4.4 Admin</h3>
+        <p>
+          A platform administrator with full access to users, pets, comments,
+          and applications.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>5. Functional Requirements</h2>
+
+        <h3>5.1 Authentication and User Accounts</h3>
+        <ul>
+          <li class="fr-item">
+            <strong>FR-001 User Registration:</strong> The system shall allow a
+            new user to create an account using full name, email, and password.
+          </li>
+          <li class="fr-item">
+            <strong>FR-002 User Login:</strong> The system shall allow
+            registered users to log in using email and password.
+          </li>
+          <li class="fr-item">
+            <strong>FR-003 User Logout:</strong> The system shall allow
+            authenticated users to log out securely.
+          </li>
+          <li class="fr-item">
+            <strong>FR-004 Profile Management:</strong> The system shall allow
+            authenticated users to view and update profile information and
+            change password.
+          </li>
+          <li class="fr-item">
+            <strong>FR-005 Role-Based Access:</strong> The system shall restrict
+            access based on user role.
+          </li>
+        </ul>
+
+        <h3>5.2 Pet Search and Browsing</h3>
+        <ul>
+          <li class="fr-item">
+            <strong>FR-006 Browse Pets:</strong> The system shall allow users
+            and visitors to view available pets.
+          </li>
+          <li class="fr-item">
+            <strong>FR-007 Search and Filter Pets:</strong> The system shall
+            allow filtering by species, breed, age, size, tags, and location.
+          </li>
+          <li class="fr-item">
+            <strong>FR-008 Pet Details:</strong> The system shall display a
+            detailed pet profile including name, species, breed, age, size,
+            photo, description, adoption requirements, comments, tags, and
+            availability status.
+          </li>
+        </ul>
+
+        <h3>5.3 Adoption Application</h3>
+        <ul>
+          <li class="fr-item">
+            <strong>FR-009 Submit Adoption Application:</strong> The system
+            shall allow authenticated users to submit an adoption application
+            for a pet.
+          </li>
+          <li class="fr-item">
+            <strong>FR-010 Application Form Fields:</strong> The adoption
+            application form shall include living situation, previous pet
+            ownership experience, and reason for adopting.
+          </li>
+          <li class="fr-item">
+            <strong>FR-011 Application Tracking:</strong> The system shall allow
+            users to track the status of submitted applications.
+          </li>
+          <li class="fr-item">
+            <strong>FR-012 Application Status:</strong> Application statuses
+            shall include Pending, Approved, and Rejected.
+          </li>
+        </ul>
+
+        <h3>5.4 Shelter / Adoption Agency Features</h3>
+        <ul>
+          <li class="fr-item">
+            <strong>FR-013 Shelter Dashboard:</strong> The system shall provide
+            shelters / agencies with a dashboard showing pet listings and
+            pending applications.
+          </li>
+          <li class="fr-item">
+            <strong>FR-014 Create Pet Listing:</strong> Shelters / agencies
+            shall be able to create pet listings with photo, description,
+            requirements, and pet attributes.
+          </li>
+          <li class="fr-item">
+            <strong>FR-015 Update Pet Listing:</strong> Shelters / agencies
+            shall be able to edit pet listings.
+          </li>
+          <li class="fr-item">
+            <strong>FR-016 Delete Pet Listing:</strong> Shelters / agencies
+            shall be able to remove pet listings.
+          </li>
+          <li class="fr-item">
+            <strong>FR-017 Review Applications:</strong> Shelters / agencies
+            shall be able to review adoption applications submitted for their
+            pets.
+          </li>
+          <li class="fr-item">
+            <strong>FR-018 Approve or Reject Applications:</strong> Shelters /
+            agencies shall be able to approve or reject applications.
+          </li>
+          <li class="fr-item">
+            <strong>FR-019 Manage Animal Comments:</strong> Shelters / agencies
+            shall be able to create, edit, or remove public comments attached to
+            animals.
+          </li>
+        </ul>
+
+        <h3>5.5 Admin Features</h3>
+        <ul>
+          <li class="fr-item">
+            <strong>FR-020 Admin Dashboard:</strong> The system shall provide an
+            admin dashboard with platform overview data.
+          </li>
+          <li class="fr-item">
+            <strong>FR-021 User Management:</strong> Admins shall be able to
+            create, view, update, and delete user accounts.
+          </li>
+          <li class="fr-item">
+            <strong>FR-022 Shelter Management:</strong> Admins shall be able to
+            manage shelter / adoption agency accounts.
+          </li>
+          <li class="fr-item">
+            <strong>FR-023 Pet Listing Moderation:</strong> Admins shall be able
+            to review, approve, reject, edit, or delete pet listings.
+          </li>
+          <li class="fr-item">
+            <strong>FR-024 Application Moderation:</strong> Admins shall be able
+            to monitor and manage adoption applications.
+          </li>
+          <li class="fr-item">
+            <strong>FR-025 Comment Moderation:</strong> Admins shall be able to
+            monitor and manage public comments displayed on animal pages.
+          </li>
+        </ul>
+
+        <h3>5.6 Nice to Have Features</h3>
+        <ul>
+          <li class="fr-item">
+            <strong>FR-026 Messaging System:</strong> The system should allow
+            private communication between users and shelters under defined
+            conditions.
+          </li>
+          <li class="fr-item">
+            <strong>FR-027 Resource Library:</strong> The system should provide
+            educational resources about pet care, training, and behavior.
+          </li>
+          <li class="fr-item">
+            <strong>FR-028 Pet Matchmaker:</strong> The system should provide a
+            compatibility quiz and suggest pets based on user answers.
+          </li>
+          <li class="fr-item">
+            <strong>FR-029 Adoption Stories:</strong> The system should display
+            success stories.
+          </li>
+          <li class="fr-item">
+            <strong>FR-030 Volunteer Opportunities:</strong> The system should
+            display volunteer opportunities.
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>6. Navigation Requirements</h2>
+        <ul>
+          <li>
+            <strong>Public Navigation:</strong> Home, Animals, Login, Register
+          </li>
+          <li>
+            <strong>User Navigation:</strong> Animals, Animal Detail, My
+            Applications, Profile, Logout
+          </li>
+          <li>
+            <strong>Shelter Navigation:</strong> Dashboard, Animal Management,
+            Applications, Comments
+          </li>
+          <li>
+            <strong>Admin Navigation:</strong> Admin Dashboard, User
+            Management, Animal Management, Application Management, Comment
+            Management
+          </li>
+          <li>
+            <strong>Footer:</strong> Contact, About, Terms &amp; Conditions,
+            Privacy Policy
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>7. Route Map</h2>
+        <p>
+          The following routes describe the main pages that will exist in the
+          MVP server-rendered Symfony application.
+        </p>
+        <div class="mono-block">/
+/animals
+/animals/{id}
+/login
+/register
+/profile
+/profile/edit
+/applications
+/adoption/{animalId}
+
+/admin
+/admin/animals
+/admin/applications
+/admin/comments
+/admin/users</div>
+      </div>
+
+      <div class="section">
+        <h2>8. System Modules</h2>
+        <ul>
+          <li><strong>Authentication Module:</strong> Registration, login, logout, access control</li>
+          <li><strong>Animal Module:</strong> Animal listing, detail page, filtering, tags, species</li>
+          <li><strong>Profile Module:</strong> User profile view and edit</li>
+          <li><strong>Adoption Module:</strong> Submit and review adoption applications</li>
+          <li><strong>Comment Module:</strong> Public comments shown on animal detail pages</li>
+          <li><strong>Admin Module:</strong> EasyAdmin-based CRUD and moderation</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>9. Core Use Cases</h2>
+        <ul>
+          <li>Browse animals</li>
+          <li>View animal details</li>
+          <li>Register and log in</li>
+          <li>Edit profile</li>
+          <li>Submit adoption application</li>
+          <li>Track own applications</li>
+          <li>Manage animals</li>
+          <li>Review adoption applications</li>
+          <li>Manage public comments</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>10. Role and Permission Matrix</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th>Visitor</th>
+              <th>Registered User</th>
+              <th>Shelter / Agency</th>
+              <th>Admin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>View animal list</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>View animal detail</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Register / Login</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Edit own profile</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Submit adoption application</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Track own applications</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Create / edit animals</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Review applications</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Manage public comments</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Manage users</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>11. Business Rules</h2>
+        <ul>
+          <li><strong>BR-001:</strong> Only authenticated users may submit adoption applications.</li>
+          <li><strong>BR-002:</strong> A user may not submit more than one application for the same animal.</li>
+          <li><strong>BR-003:</strong> Each adoption application must be linked to exactly one user and one animal.</li>
+          <li><strong>BR-004:</strong> Only shelter or admin roles may create, edit, or delete animal listings.</li>
+          <li><strong>BR-005:</strong> Only shelter or admin roles may manage public comments on animals.</li>
+          <li><strong>BR-006:</strong> If an application is approved, the related animal should no longer appear as available.</li>
+          <li><strong>BR-007:</strong> Visitors may browse animals but cannot apply without authentication.</li>
+          <li><strong>BR-008:</strong> Users may only edit their own profile.</li>
+          <li><strong>BR-009:</strong> Admin-only pages must be restricted by role-based access control.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>12. Non-Functional Requirements</h2>
+        <ul>
+          <li>
+            <strong>NFR-001 Usability:</strong> The system shall provide a clear
+            and user-friendly interface.
+          </li>
+          <li>
+            <strong>NFR-002 Responsiveness:</strong> The platform shall be
+            usable on desktop, tablet, and mobile devices.
+          </li>
+          <li>
+            <strong>NFR-003 Security:</strong> The system shall protect user
+            data through secure authentication, password hashing, and role-based
+            authorization.
+          </li>
+          <li>
+            <strong>NFR-004 Performance:</strong> The system shall load search
+            results and dashboards within an acceptable time under normal usage.
+          </li>
+          <li>
+            <strong>NFR-005 Data Integrity:</strong> The system shall maintain
+            consistent records for animals, users, profiles, applications, and
+            comments.
+          </li>
+          <li>
+            <strong>NFR-006 Availability:</strong> The system should be
+            available with minimal downtime.
+          </li>
+          <li>
+            <strong>NFR-007 Maintainability:</strong> The codebase should follow
+            clean architecture and modular design principles.
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>13. Data Requirements</h2>
+        <p>The system should include at minimum the following entities:</p>
+        <ul>
+          <li>User</li>
+          <li>Profile</li>
+          <li>Housing Type</li>
+          <li>Animal</li>
+          <li>Species</li>
+          <li>Tag</li>
+          <li>Animal Tag</li>
+          <li>Adoption Application</li>
+          <li>Comment</li>
+        </ul>
+
+        <p>Possible relationships:</p>
+        <ul>
+          <li>A user has one profile</li>
+          <li>A housing type can be used by many profiles</li>
+          <li>An animal belongs to one species</li>
+          <li>An animal can have many tags</li>
+          <li>A user can submit many applications</li>
+          <li>An animal can receive many applications</li>
+          <li>An animal can have many public comments</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>14. Suggested MVP</h2>
+        <ul>
+          <li>User registration and login</li>
+          <li>Role-based access</li>
+          <li>Public animal browsing and filtering</li>
+          <li>Animal detail page</li>
+          <li>Profile management</li>
+          <li>Adoption application form</li>
+          <li>Application approval / rejection</li>
+          <li>Animal CRUD for shelter / admin</li>
+          <li>Public comment management by shelter / admin</li>
+          <li>Admin dashboard basics</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>15. MVP Roadmap</h2>
+
+        <h3>Phase 1</h3>
+        <ul>
+          <li>Project setup</li>
+          <li>Database schema</li>
+          <li>Authentication</li>
+          <li>Animal list and detail page</li>
+        </ul>
+
+        <h3>Phase 2</h3>
+        <ul>
+          <li>Profile management</li>
+          <li>Adoption application form</li>
+          <li>Application tracking</li>
+        </ul>
+
+        <h3>Phase 3</h3>
+        <ul>
+          <li>Admin / shelter CRUD for animals</li>
+          <li>Application review and approval / rejection</li>
+          <li>Comment management</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>16. Task Breakdown and Work Distribution</h2>
+
+        <p>
+          Because this is a university project, responsibilities are assigned by
+          primary ownership, but technical work is shared. The Product Owner and
+          Tech Lead keep their strategic responsibilities, while the Tech Lead,
+          Backend Developer, and Frontend / UI Developer all contribute to implementation.
+        </p>
+
+        <h3>16.1 Product Owner</h3>
+        <ul>
+          <li>Own the requirements document and scope alignment</li>
+          <li>Maintain the MVP definition and MoSCoW prioritization</li>
+          <li>Clarify user stories, acceptance criteria, and business rules</li>
+          <li>Support team coordination and backlog prioritization</li>
+        </ul>
+
+        <h3>16.2 Tech Lead</h3>
+        <ul>
+          <li>Define the technical structure of the project and keep implementation aligned</li>
+          <li>Review the database design, route map, and module boundaries</li>
+          <li>Contribute to backend implementation where needed</li>
+          <li>Contribute to frontend structure and integration where needed</li>
+          <li>Support code review and technical consistency across the project</li>
+        </ul>
+
+        <h3>16.3 Backend Developer</h3>
+        <ul>
+          <li>Set up Symfony project structure</li>
+          <li>Create database schema, entities, relations, and migrations</li>
+          <li>Implement authentication, role restriction, and business logic</li>
+          <li>Create forms and controllers for animals, profiles, and adoption applications</li>
+          <li>Implement approval / rejection logic and comment management</li>
+          <li>Support frontend integration for templates and form rendering</li>
+        </ul>
+
+        <h3>16.4 Frontend / UI Developer</h3>
+        <ul>
+          <li>Create the public and authenticated user pages</li>
+          <li>Create the animal list, animal detail, profile, and adoption form views</li>
+          <li>Implement layout, navigation, styling, and responsiveness</li>
+          <li>Support integration of Twig templates and Bootstrap-based UI</li>
+          <li>Assist with form presentation and admin-facing screens where needed</li>
+        </ul>
+
+        <h3>16.5 Shared QA / Validation Tasks</h3>
+        <ul>
+          <li>Validate role access rules</li>
+          <li>Validate application submission flow</li>
+          <li>Validate duplicate application prevention</li>
+          <li>Validate animal availability behavior after approval</li>
+          <li>Validate responsive layout on multiple screen sizes</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>17. Optional Agile / RE Deliverables</h2>
+        <ul>
+          <li><strong>ERD:</strong> Showing users, profiles, animals, adoption applications, comments, and tags</li>
+          <li><strong>User Flow:</strong> Navigation from animal list to detail, profile, and adoption form</li>
+          <li><strong>User Stories:</strong> With acceptance criteria</li>
+          <li><strong>Sprint Board:</strong> Jira or Trello board to plan sprints and track progress</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>18. Expected Benefits</h2>
+        <ul>
+          <li>Supports animal welfare and pet adoption</li>
+          <li>Provides hands-on experience with full-stack development</li>
+          <li>Demonstrates CRUD, authentication, filtering, and workflow management</li>
+          <li>Strengthens portfolio with a real-world platform concept</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>19. Team Roles and Ownership</h2>
+        <ul>
+          <li>
+            <strong>Product Owner:</strong>
+            <span class="name-line">Kingsley Debrah</span>
+          </li>
+          <li>
+            <strong>Tech Lead:</strong>
+            <span class="name-line">Peter Bozso</span>
+          </li>
+          <li>
+            <strong>Backend Developer:</strong>
+            <span class="name-line">Gastón Levy</span>
+          </li>
+          <li>
+            <strong>Frontend / UI Developer:</strong>
+            <span class="name-line">Istvan Lakatos</span>
+          </li>
+        </ul>
+
+        <p>
+          Since this is a university project, work is distributed with primary owners,
+          but not with strict isolation. The Product Owner remains focused on product
+          definition and coordination. The Tech Lead keeps technical responsibility and
+          also contributes to both backend and frontend decisions. The Backend Developer
+          focuses mainly on Symfony, data, and business logic, but also supports template
+          integration and user-facing forms. The Frontend / UI Developer focuses mainly on
+          pages, layout, and responsiveness, while also collaborating on integration with
+          server-rendered views.
+        </p>
+
+        <p>
+          This structure keeps the role titles clear while reflecting the collaborative
+          nature of a small academic team.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>20. MoSCoW Prioritization</h2>
+
+        <h3 class="priority-title">Must Have</h3>
+        <ul>
+          <li>User authentication</li>
+          <li>Animal browsing and filtering</li>
+          <li>Animal detail page</li>
+          <li>Adoption application form</li>
+          <li>Shelter pet listing management</li>
+          <li>Application review and approval / rejection</li>
+        </ul>
+
+        <h3 class="priority-title">Should Have</h3>
+        <ul>
+          <li>User profile management</li>
+          <li>Admin dashboard</li>
+          <li>User and shelter management</li>
+          <li>Public comment management</li>
+        </ul>
+
+        <h3 class="priority-title">Could Have</h3>
+        <ul>
+          <li>Messaging system</li>
+          <li>Resource library</li>
+          <li>Pet of the day / week</li>
+        </ul>
+
+        <h3 class="priority-title">Won't Have (for now)</h3>
+        <ul>
+          <li>Pet matchmaker</li>
+          <li>Adoption stories page</li>
+          <li>Foster-to-adopt program</li>
+          <li>Volunteer opportunities with calendar integration</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>21. Example User Stories</h2>
+        <ul>
+          <li>
+            <strong>User Story 1:</strong>
+            As a visitor, I want to browse available animals so that I can find
+            a pet to adopt.
+          </li>
+          <li>
+            <strong>User Story 2:</strong>
+            As a registered user, I want to submit an adoption application so
+            that I can begin the adoption process.
+          </li>
+          <li>
+            <strong>User Story 3:</strong>
+            As a registered user, I want to update my profile so that my
+            adoption information stays accurate.
+          </li>
+          <li>
+            <strong>User Story 4:</strong>
+            As a shelter representative, I want to review adoption applications
+            so that I can approve or reject requests.
+          </li>
+          <li>
+            <strong>User Story 5:</strong>
+            As an admin, I want to manage users, animals, and comments so that
+            the platform remains consistent and moderated.
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>22. Acceptance Criteria Example</h2>
+        <h3>Feature: Submit Adoption Application</h3>
+        <ul>
+          <li>The user must be logged in before submitting an application.</li>
+          <li>
+            The application form must include living situation, previous pet
+            ownership experience, and reason for adopting.
+          </li>
+          <li>
+            After submission, the application must be saved in the system.
+          </li>
+          <li>
+            The default application status must be
+            <span class="code-like">Pending</span>.
+          </li>
+          <li>
+            The shelter or adoption agency must be able to review the
+            application later.
+          </li>
+          <li>
+            The same user must not be able to submit a duplicate application for
+            the same animal.
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>23. Technology Stack</h2>
+        <ul>
+          <li><strong>Backend Framework:</strong> Symfony</li>
+          <li><strong>Frontend:</strong> HTML, CSS, Bootstrap</li>
+          <li><strong>Database:</strong> MySQL</li>
+          <li><strong>Admin Panel:</strong> EasyAdmin</li>
+          <li>
+            <strong>Architecture Style:</strong> Server-rendered web application
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
