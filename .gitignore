@@ -1,0 +1,35 @@
+### Symfony ###
+/app/var/
+/app/vendor/
+/app/.env.local
+/app/.env.*.local
+/app/config/secrets/prod/prod.decrypt.private.php
+/app/public/bundles/
+
+### Docker ###
+/docker/*.log
+/docker-compose.override.yml
+
+### Database ###
+/*.sql
+/*.sqlite
+
+### Node (por si agregás assets luego) ###
+/app/node_modules/
+/app/public/build/
+/app/.yarn/
+
+### IDE ###
+/.idea/
+/.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+
+### Git ###
+*.swp
+*.swo
