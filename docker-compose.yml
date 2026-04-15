@@ -14,6 +14,9 @@ services:
         composer create-project symfony/skeleton /var/www/html/app &&
         cd /var/www/html/app &&
         composer require webapp;
+      else
+        cd /var/www/html/app &&
+        composer install;
       fi &&
       chown -R www-data:www-data /var/www/html/app &&
       apache2-foreground
