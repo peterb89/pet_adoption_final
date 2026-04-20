@@ -1,110 +1,77 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Profile;
 
-use App\Repository\ProfileRepository;
+use App\Repository\Profile\ProfileRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
 class Profile
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $firstName = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $lastName = null;
-
-    #[ORM\Column(length: 20, nullable: true)]
-    private ?string $phoneNumber = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $city = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $address = null;
-
-    #[ORM\ManyToOne(inversedBy: 'profiles')]
-    private ?HousingType $housingType = null;
+    #[ORM\Id] #[ORM\GeneratedValue] #[ORM\Column] private ?int $id = null;
+    #[ORM\Column(length: 255)] private ?string $firstName = null;
+    #[ORM\Column(length: 255)] private ?string $lastName = null;
+    #[ORM\Column(length: 20, nullable: true)] private ?string $phoneNumber = null;
+    #[ORM\Column(length: 255)] private ?string $city = null;
+    #[ORM\Column(length: 255)] private ?string $address = null;
+    #[ORM\ManyToOne(inversedBy: 'profiles')] private ?HousingType $housingType = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
-
-    public function setFirstName(string $firstName): static
+    public function setFirstName(string $f): self
     {
-        $this->firstName = $firstName;
-
+        $this->firstName = $f;
         return $this;
     }
-
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
-
-    public function setLastName(string $lastName): static
+    public function setLastName(string $l): self
     {
-        $this->lastName = $lastName;
-
+        $this->lastName = $l;
         return $this;
     }
-
     public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
-
-    public function setPhoneNumber(?string $phoneNumber): static
+    public function setPhoneNumber(?string $p): self
     {
-        $this->phoneNumber = $phoneNumber;
-
+        $this->phoneNumber = $p;
         return $this;
     }
-
     public function getCity(): ?string
     {
         return $this->city;
     }
-
-    public function setCity(string $city): static
+    public function setCity(string $c): self
     {
-        $this->city = $city;
-
+        $this->city = $c;
         return $this;
     }
-
     public function getAddress(): ?string
     {
         return $this->address;
     }
-
-    public function setAddress(string $address): static
+    public function setAddress(string $a): self
     {
-        $this->address = $address;
-
+        $this->address = $a;
         return $this;
     }
-
     public function getHousingType(): ?HousingType
     {
         return $this->housingType;
     }
-
-    public function setHousingType(?HousingType $housingType): static
+    public function setHousingType(?HousingType $h): self
     {
-        $this->housingType = $housingType;
-
+        $this->housingType = $h;
         return $this;
     }
 }
