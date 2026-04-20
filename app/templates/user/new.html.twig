@@ -3,18 +3,7 @@
 {% block title %}New User{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body p-4 p-lg-5">
-                        <h1 class="h3 mb-1">Create new user</h1>
-                        <p class="text-secondary mb-4">Add a new account to the system.</p>
+    <h1>Create new user</h1>
 
-                        {{ include('user/_form.html.twig') }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{ include('user/_form.html.twig') }}
 {% endblock %}

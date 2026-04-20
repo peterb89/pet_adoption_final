@@ -3,22 +3,9 @@
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm mb-3">
-                    <div class="card-body p-4 p-lg-5">
-                        <h1 class="h3 mb-1">Edit user</h1>
-                        <p class="text-secondary mb-4">Update the selected account details.</p>
+    <h1>Edit user</h1>
 
-                        {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
-                    </div>
-                </div>
+    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
 
-                <div class="d-flex justify-content-end">
-                    {{ include('user/_delete_form.html.twig') }}
-                </div>
-            </div>
-        </div>
-    </div>
+    {{ include('user/_delete_form.html.twig') }}
 {% endblock %}
