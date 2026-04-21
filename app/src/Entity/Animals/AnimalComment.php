@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Animal\Entity;
+namespace App\Entity\Animals;
 
 use App\Entity\Animals\Animal;
 use App\Entity\Authentification\User;

@@ -2,7 +2,7 @@
 
 namespace App\Entity\Animals;
 
-use App\Entity\Animal\AnimalComment;
+use App\Entity\Animals\AnimalComment;
 use App\Repository\AnimalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
