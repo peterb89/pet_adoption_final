@@ -14,9 +14,6 @@ services:
         composer create-project symfony/skeleton /var/www/html/app &&
         cd /var/www/html/app &&
         composer require webapp;
-      else
-        cd /var/www/html/app &&
-        composer install;
       fi &&
       chown -R www-data:www-data /var/www/html/app &&
       apache2-foreground
@@ -24,7 +21,7 @@ services:
 
   db:
     image: mysql:8.0
-    container_name: symfony_db_petclinic
+    container_name: symfony_db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: symfony
@@ -35,17 +32,6 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-
-  phpmyadmin:
-      image: phpmyadmin:latest
-      container_name: symfony_phpmyadmin
-      ports:
-        - "8080:80"
-      environment:
-        PMA_HOST: db
-        MYSQL_ROOT_PASSWORD: root
-      depends_on:
-        - db
 
 volumes:
   db_data:
