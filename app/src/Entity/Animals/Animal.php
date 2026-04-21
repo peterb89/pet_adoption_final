@@ -2,7 +2,10 @@
 
 namespace App\Entity\Animals;
 
+use App\Entity\Animal\AnimalComment;
 use App\Repository\AnimalRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
@@ -30,6 +33,17 @@ class Animal
 
     #[ORM\ManyToOne]
     private ?Species $species = null;
+
+    /**
+     * @var Collection<int, AnimalComment>
+     */
+    #[ORM\OneToMany(targetEntity: AnimalComment::class, mappedBy: 'animal')]
+    private Collection $animalComments;
+
+    public function __construct()
+    {
+        $this->animalComments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +118,36 @@ class Animal
     public function setSpecies(?Species $species): static
     {
         $this->species = $species;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AnimalComment>
+     */
+    public function getAnimalComments(): Collection
+    {
+        return $this->animalComments;
+    }
+
+    public function addAnimalComment(AnimalComment $animalComment): static
+    {
+        if (!$this->animalComments->contains($animalComment)) {
+            $this->animalComments->add($animalComment);
+            $animalComment->setAnimal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnimalComment(AnimalComment $animalComment): static
+    {
+        if ($this->animalComments->removeElement($animalComment)) {
+            // set the owning side to null (unless already changed)
+            if ($animalComment->getAnimal() === $this) {
+                $animalComment->setAnimal(null);
+            }
+        }
 
         return $this;
     }

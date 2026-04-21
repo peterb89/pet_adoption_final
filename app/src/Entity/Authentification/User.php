@@ -2,7 +2,10 @@
 
 namespace App\Entity\Authentification;
 
+use App\Entity\Animals\AnimalComment;
 use App\Repository\Authentification\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +34,17 @@ class User
 
     #[ORM\Column]
     private ?\DateTime $updated_at = null;
+
+    /**
+     * @var Collection<int, AnimalComment>
+     */
+    #[ORM\ManyToMany(targetEntity: AnimalComment::class, mappedBy: 'author')]
+    private Collection $animalComments;
+
+    public function __construct()
+    {
+        $this->animalComments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +119,33 @@ class User
     public function setUpdatedAt(\DateTime $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AnimalComment>
+     */
+    public function getAnimalComments(): Collection
+    {
+        return $this->animalComments;
+    }
+
+    public function addAnimalComment(AnimalComment $animalComment): static
+    {
+        if (!$this->animalComments->contains($animalComment)) {
+            $this->animalComments->add($animalComment);
+            $animalComment->addAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnimalComment(AnimalComment $animalComment): static
+    {
+        if ($this->animalComments->removeElement($animalComment)) {
+            $animalComment->removeAuthor($this);
+        }
 
         return $this;
     }
