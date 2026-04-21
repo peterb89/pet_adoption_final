@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Animals;
 
 use App\Repository\AnimalTagRepository;
 use Doctrine\ORM\Mapping as ORM;
