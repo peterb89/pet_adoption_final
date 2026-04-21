@@ -18,6 +18,7 @@ use App\Controller\Admin\Animals\AnimalCrudController;
 use App\Controller\Admin\Animals\AnimalTagCrudController;
 use App\Controller\Admin\Animals\SpeciesCrudController;
 use App\Controller\Admin\Animals\TagCrudController;
+use App\Controller\Admin\Animals\AnimalCommentCrudController;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
@@ -51,6 +52,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Animals');
         yield MenuItem::linkTo(AnimalCrudController::class, 'Animals', 'fas fa-paw');
+        yield MenuItem::linkTo(AnimalCommentCrudController::class, 'Comments', 'fas fa-comments');
         yield MenuItem::linkTo(AnimalTagCrudController::class, 'Animal Tags', 'fas fa-tags');
         yield MenuItem::linkTo(SpeciesCrudController::class, 'Species', 'fas fa-dna');
         yield MenuItem::linkTo(TagCrudController::class, 'Tags', 'fas fa-tag');
