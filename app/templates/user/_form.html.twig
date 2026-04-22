@@ -1,5 +1,7 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_row(form.is_verified) }}
     <button>{{ button_label|default('Save') }}</button>
     <a href="{{ path('app_user_index') }}">Back to list</a>
 {{ form_end(form) }}
