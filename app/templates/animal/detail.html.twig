@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ animal.name }}{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <a href="{{ path('animal_index') }}" class="btn btn-secondary mb-3">Back to Animals</a>
+
+    <h1>{{ animal.name }}</h1>
+
+    {% if animal.photoFilename %}
+        <img src="{{ asset('uploads/' ~ animal.photoFilename) }}" alt="{{ animal.name }}" class="img-fluid mb-3" style="max-height: 400px;">
+    {% else %}
+        <img src="https://placehold.co/800x400?text=No+Photo" alt="No photo" class="img-fluid mb-3">
+    {% endif %}
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Species</th>
+            <td>{{ animal.species ? animal.species.name : 'Unknown' }}</td>
+        </tr>
+        <tr>
+            <th>Breed</th>
+            <td>{{ animal.breed ?? 'Unknown' }}</td>
+        </tr>
+        <tr>
+            <th>Age</th>
+            <td>{{ animal.age ? animal.age ~ ' years' : 'Unknown' }}</td>
+        </tr>
+        <tr>
+            <th>Location</th>
+            <td>{{ animal.location ?? 'Unknown' }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ animal.status }}</td>
+        </tr>
+        <tr>
+            <th>Tags</th>
+            <td>
+                {% if animal.animalTags is not empty %}
+                    {% for animalTag in animal.animalTags %}
+                        <span class="badge bg-secondary">{{ animalTag.tag.name }}</span>
+                    {% endfor %}
+                {% else %}
+                    No tags
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+</div>
+{% endblock %}

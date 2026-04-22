@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Animals{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <h1>Available Animals</h1>
+
+    <div class="row">
+        {% for animal in animals %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+
+                {% if animal.photoFilename %}
+                    <img src="{{ asset('uploads/' ~ animal.photoFilename) }}" class="card-img-top" alt="{{ animal.name }}">
+                {% else %}
+                    <img src="https://placehold.co/400x200?text=No+Photo" class="card-img-top" alt="No photo">
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ animal.name }}</h5>
+
+                    <p class="card-text">
+                        <strong>Species:</strong> {{ animal.species ? animal.species.name : 'Unknown' }}<br>
+                        <strong>Age:</strong> {{ animal.age ? animal.age ~ ' years' : 'Unknown' }}<br>
+                        <strong>Status:</strong> {{ animal.status }}<br>
+                        <strong>Location:</strong> {{ animal.location ?? 'Unknown' }}
+                    </p>
+
+                    {% if animal.animalTags is not empty %}
+                    <p>
+                        {% for animalTag in animal.animalTags %}
+                            <span class="badge bg-secondary">{{ animalTag.tag.name }}</span>
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+
+                    <a href="{{ path('animal_detail', { id: animal.id }) }}" class="btn btn-primary">View Details</a>
+                </div>
+
+            </div>
+        </div>
+        {% else %}
+            <p>No animals found.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
