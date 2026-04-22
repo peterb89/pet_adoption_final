@@ -4,7 +4,9 @@
 
 {% block body %}
     <h1>Users</h1>
-    <a href="{{ path('app_user_new') }}">Create new user</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_user_new') }}">Create new user</a>
+    {% endif %}
 
     <table>
         <thead>
@@ -23,13 +25,19 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.roles }}</td>
+                <td>{{ user.roles|join(', ') }}</td>
                 <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
                 <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i') : '' }}</td>
                 <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i') : '' }}</td>
                 <td>
                     <a href="{{ path('app_user_show', {'id': user.id}) }}">View</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">Edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_user_edit', {'id': user.id}) }}">Edit</a>
+                        <form method="post" action="{{ path('app_user_toggle_verified', {'id': user.id}) }}" style="display:inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('toggle_verified' ~ user.id) }}">
+                            <button type="submit">Toggle verified</button>
+                        </form>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
