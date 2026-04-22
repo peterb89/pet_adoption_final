@@ -1,24 +1,25 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Animals;
 
-use App\Entity\Species;
+use App\Entity\Animals\AnimalTag;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class SpeciesCrudController extends AbstractCrudController
+class AnimalTagCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Species::class;
+        return AnimalTag::class;
     }
 
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id')->hideOnForm(),
-            TextField::new('name'),
+            AssociationField::new('animal'),
+            AssociationField::new('tag'),
         ];
     }
 }
