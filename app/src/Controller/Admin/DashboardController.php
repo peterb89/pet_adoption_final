@@ -3,13 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Controller\Admin\Profile\ProfileCrudController;
-use App\Controller\Admin\Profile\HousingTypeCrudController;
-use App\Controller\Admin\Authentification\UserCrudController;
-use App\Controller\Admin\Animals\AnimalCrudController;
-use App\Controller\Admin\Animals\AnimalTagCrudController;
-use App\Controller\Admin\Animals\SpeciesCrudController;
-use App\Controller\Admin\Animals\TagCrudController;
-
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -22,7 +15,6 @@ class DashboardController extends AbstractDashboardController
 {
     public function index(): Response
     {
-        // Tech Lead Fix: Redirecting to Profiles as the primary view for this Sprint
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
         return $this->redirect($adminUrlGenerator->setController(ProfileCrudController::class)->generateUrl());
     }
@@ -37,16 +29,15 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
         yield MenuItem::section('Users');
-        yield MenuItem::linkToCrud('Users', 'fas fa-users', \App\Entity\User::class);
+        yield MenuItem::linkToRoute('Users List', 'fas fa-users', 'admin_user_index');
 
         yield MenuItem::section('Profiles');
-        yield MenuItem::linkToCrud('Profiles', 'fas fa-user', \App\Entity\Profile\Profile::class);
-        yield MenuItem::linkToCrud('Housing Types', 'fas fa-house-user', \App\Entity\Profile\HousingType::class);
+        yield MenuItem::linkToRoute('Profiles', 'fas fa-user', 'admin_profile_index');
+        yield MenuItem::linkToRoute('Housing Types', 'fas fa-house-user', 'admin_housing_type_index');
 
         yield MenuItem::section('Animals');
-        yield MenuItem::linkToCrud('Animals', 'fas fa-paw', \App\Entity\Animals\Animal::class);
-        yield MenuItem::linkToCrud('Animal Tags', 'fas fa-tags', \App\Entity\Animals\AnimalTag::class);
-        yield MenuItem::linkToCrud('Species', 'fas fa-dna', \App\Entity\Animals\Species::class);
-        yield MenuItem::linkToCrud('Tags', 'fas fa-tag', \App\Entity\Animals\Tag::class);
+        yield MenuItem::linkToRoute('Animals List', 'fas fa-paw', 'admin_animal_index');
+        yield MenuItem::linkToRoute('Species', 'fas fa-dna', 'admin_species_index');
+        yield MenuItem::linkToRoute('Tags', 'fas fa-tag', 'admin_tag_index');
     }
 }
