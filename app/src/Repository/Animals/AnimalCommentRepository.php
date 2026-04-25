@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Animal;
+namespace App\Repository\Animals;
 
 use App\Entity\Animal\AnimalComment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
