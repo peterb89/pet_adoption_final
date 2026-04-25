@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
+  
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0d1117;color:#e6edf3;font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden}
+  
+  /* HEADER */
+  .header{background:linear-gradient(135deg,#0d2818 0%,#0d1117 60%);border-bottom:1px solid #21a45320;padding:28px 40px 24px;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,#21a45318 0%,transparent 70%);pointer-events:none}
+  .header-badge{display:inline-flex;align-items:center;gap:6px;background:#21a45315;border:1px solid #21a45340;border-radius:20px;padding:4px 12px;font-size:11px;color:#4ade80;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+  .header h1{font-family:'DM Serif Display',serif;font-size:2rem;color:#fff;line-height:1.1}
+  .header h1 em{color:#4ade80;font-style:normal}
+  .header p{margin-top:6px;color:#8b949e;font-size:.85rem;font-weight:300;max-width:600px}
+  
+  /* TABS */
+  .tabs{display:flex;gap:2px;padding:16px 40px 0;background:#0d1117;border-bottom:1px solid #21262d;overflow-x:auto}
+  .tab{padding:10px 20px;font-size:.8rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;border-radius:6px 6px 0 0;color:#8b949e;border:1px solid transparent;border-bottom:none;transition:.2s;white-space:nowrap;font-family:'DM Mono',monospace}
+  .tab:hover{color:#e6edf3;background:#161b22}
+  .tab.active{background:#161b22;color:#4ade80;border-color:#21262d #21262d transparent}
+  
+  /* PANELS */
+  .panel{display:none;padding:36px 40px;animation:fadeIn .25s ease}
+  .panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  
+  /* SECTION TITLES */
+  .section-label{font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:#4ade80;margin-bottom:6px}
+  .section-title{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#fff;margin-bottom:4px}
+  .section-desc{font-size:.82rem;color:#8b949e;margin-bottom:32px;line-height:1.6;max-width:680px}
+  
+  /* ═══════════════════════════════════
+     PANEL 1 - USER FLOW DIAGRAM
+  ═══════════════════════════════════ */
+  .flow-grid{display:flex;flex-direction:column;gap:0}
+  .flow-lane{display:flex;align-items:stretch;gap:0;border-bottom:1px solid #21262d}
+  .flow-lane:last-child{border-bottom:none}
+  .lane-label{width:120px;min-width:120px;display:flex;align-items:center;justify-content:center;padding:16px 8px;writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:#8b949e;border-right:1px solid #21262d;background:#0d1117}
+  .lane-content{flex:1;padding:20px 24px;display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+  
+  /* FLOW NODES */
+  .node{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:6px;font-size:.78rem;font-weight:500;white-space:nowrap}
+  .node-start{background:#1a3a2a;border:1.5px solid #4ade80;color:#4ade80}
+  .node-page{background:#162032;border:1.5px solid #3b82f6;color:#93c5fd}
+  .node-form{background:#2a1a0d;border:1.5px solid #f59e0b;color:#fcd34d}
+  .node-decision{background:#2a0d1a;border:1.5px dashed #f43f5e;color:#fda4af;border-radius:4px}
+  .node-admin{background:#1a0d2a;border:1.5px solid #a78bfa;color:#c4b5fd}
+  .node-end{background:#1a2a1a;border:1.5px solid #4ade80;color:#4ade80}
+  
+  .arrow{color:#4b5563;font-size:1.1rem;display:flex;align-items:center}
+  
+  /* STEP-BY-STEP JOURNEY */
+  .journey{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px}
+  .journey-col h3{font-family:'DM Serif Display',serif;font-size:1rem;color:#fff;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #21262d;display:flex;align-items:center;gap:8px}
+  .journey-col h3 .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .step{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}
+  .step-num{width:22px;height:22px;min-width:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-family:'DM Mono',monospace;font-weight:500;margin-top:1px}
+  .step-body strong{font-size:.8rem;color:#e6edf3;display:block;margin-bottom:2px}
+  .step-body span{font-size:.74rem;color:#8b949e;line-height:1.5}
+  .step-lock{background:#21262d;border:1px solid #373e47;border-radius:4px;display:inline-flex;align-items:center;gap:4px;padding:2px 7px;font-size:.65rem;color:#f59e0b;font-family:'DM Mono',monospace;margin-top:3px}
+  
+  /* USER flow */
+  .u .step-num{background:#162032;border:1px solid #3b82f6;color:#93c5fd}
+  /* ADMIN flow */
+  .a .step-num{background:#1a0d2a;border:1px solid #a78bfa;color:#c4b5fd}
+  
+  /* ═══════════════════════════════════
+     PANEL 2 - DB SCHEMA
+  ═══════════════════════════════════ */
+  .schema-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+  .entity{background:#161b22;border:1px solid #21262d;border-radius:8px;overflow:hidden;transition:.2s}
+  .entity:hover{border-color:#4ade8040;transform:translateY(-2px)}
+  .entity-header{padding:10px 14px;font-family:'DM Mono',monospace;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:8px}
+  .entity-header .icon{font-size:.9rem}
+  .entity-fields{padding:4px 0 10px}
+  .field{display:flex;justify-content:space-between;align-items:center;padding:3px 14px;font-size:.7rem}
+  .field-name{color:#e6edf3;font-family:'DM Mono',monospace}
+  .field-type{color:#6e7681;font-family:'DM Mono',monospace;font-size:.65rem}
+  .field.pk .field-name{color:#f59e0b}
+  .field.fk .field-name{color:#93c5fd}
+  .field.special .field-type{color:#a78bfa}
+  .entity-divider{height:1px;background:#21262d;margin:4px 0}
+  
+  /* entity colors */
+  .e-users .entity-header{background:#1a2a1a;color:#4ade80}
+  .e-profiles .entity-header{background:#162032;color:#93c5fd}
+  .e-animals .entity-header{background:#2a1a0d;color:#fcd34d}
+  .e-species .entity-header{background:#1e1a2a;color:#c4b5fd}
+  .e-applications .entity-header{background:#2a1a1a;color:#fda4af}
+  .e-comments .entity-header{background:#1a2a2a;color:#67e8f9}
+  .e-tags .entity-header{background:#2a1a2a;color:#e879f9}
+  .e-housing .entity-header{background:#1a1a2a;color:#a5b4fc}
+  
+  /* RELATIONS */
+  .relations{margin-top:28px}
+  .relations h3{font-family:'DM Serif Display',serif;font-size:1rem;color:#fff;margin-bottom:14px}
+  .rel-list{display:flex;flex-wrap:wrap;gap:8px}
+  .rel{display:flex;align-items:center;gap:6px;background:#161b22;border:1px solid #21262d;border-radius:6px;padding:6px 12px;font-size:.72rem;font-family:'DM Mono',monospace}
+  .rel-from{color:#93c5fd}.rel-arrow{color:#6e7681}.rel-to{color:#4ade80}.rel-type{color:#f59e0b;font-size:.65rem}
+  
+  /* ═══════════════════════════════════
+     PANEL 3 - SYSTEM ARCHITECTURE
+  ═══════════════════════════════════ */
+  .arch-diagram{display:flex;flex-direction:column;gap:20px}
+  .arch-row{display:flex;gap:16px;align-items:stretch}
+  .arch-layer{flex:1;background:#161b22;border:1px solid #21262d;border-radius:10px;padding:16px;position:relative;overflow:hidden}
+  .arch-layer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+  .arch-layer.green::before{background:linear-gradient(90deg,#4ade80,transparent)}
+  .arch-layer.blue::before{background:linear-gradient(90deg,#3b82f6,transparent)}
+  .arch-layer.amber::before{background:linear-gradient(90deg,#f59e0b,transparent)}
+  .arch-layer.purple::before{background:linear-gradient(90deg,#a78bfa,transparent)}
+  .arch-layer.red::before{background:linear-gradient(90deg,#f43f5e,transparent)}
+  .arch-layer.cyan::before{background:linear-gradient(90deg,#22d3ee,transparent)}
+  
+  .arch-layer-title{font-family:'DM Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#6e7681;margin-bottom:12px}
+  .arch-items{display:flex;flex-wrap:wrap;gap:8px}
+  .arch-item{padding:6px 12px;border-radius:5px;font-size:.75rem;font-weight:500;display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .arch-item.green{background:#1a3a2a;color:#4ade80;border:1px solid #21a45330}
+  .arch-item.blue{background:#162032;color:#93c5fd;border:1px solid #3b82f620}
+  .arch-item.amber{background:#2a1a0d;color:#fcd34d;border:1px solid #f59e0b20}
+  .arch-item.purple{background:#1a0d2a;color:#c4b5fd;border:1px solid #a78bfa20}
+  .arch-item.red{background:#2a0d0d;color:#fda4af;border:1px solid #f43f5e20}
+  .arch-item.cyan{background:#0d2a2a;color:#67e8f9;border:1px solid #22d3ee20}
+  .arch-item.gray{background:#1c2128;color:#8b949e;border:1px solid #30363d}
+  
+  .arch-divider{display:flex;align-items:center;gap:12px;color:#21262d;font-size:.7rem;font-family:'DM Mono',monospace;padding:0 4px}
+  .arch-divider::before,.arch-divider::after{content:'';flex:1;height:1px;background:#21262d}
+  
+  /* Sprint 4 modules */
+  .modules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:6px}
+  .module-card{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:14px;position:relative}
+  .module-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:4px 0 0 4px}
+  .mc-green::before{background:#4ade80}.mc-blue::before{background:#3b82f6}.mc-amber::before{background:#f59e0b}.mc-purple::before{background:#a78bfa}
+  .module-tag{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+  .mc-green .module-tag{color:#4ade80}.mc-blue .module-tag{color:#93c5fd}.mc-amber .module-tag{color:#fcd34d}.mc-purple .module-tag{color:#c4b5fd}
+  .module-card h4{font-size:.85rem;color:#e6edf3;margin-bottom:4px}
+  .module-card p{font-size:.74rem;color:#8b949e;line-height:1.5}
+  .module-branch{font-family:'DM Mono',monospace;font-size:.65rem;color:#30363d;background:#161b22;border:1px solid #21262d;border-radius:4px;padding:2px 8px;display:inline-block;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">🐾 Sprint 4 &nbsp;·&nbsp; Product Owner Presentation</div>
+  <h1>Pet Adoption Platform — <em>Architecture Overview</em></h1>
+  <p>Complete product workflow, database schema, and system architecture to guide Sprint 4 development and all future sprints.</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('flow',this)">01 · App Workflow</div>
+  <div class="tab" onclick="switchTab('schema',this)">02 · Database Schema</div>
+  <div class="tab" onclick="switchTab('arch',this)">03 · System Architecture</div>
+</div>
+
+<!-- ─────────────────────────────────────
+     PANEL 1: APP WORKFLOW
+───────────────────────────────────── -->
+<div id="panel-flow" class="panel active">
+  <div class="section-label">Product Workflow</div>
+  <div class="section-title">User Journey from Entry to Adoption</div>
+  <div class="section-desc">
+    Step-by-step functional flow for all user types. This is the source of truth for what pages and interactions the app must support — no technical details, just product logic.
+  </div>
+
+  <div class="journey">
+    <!-- USER JOURNEY -->
+    <div class="journey-col u">
+      <h3><span class="dot" style="background:#3b82f6"></span>Registered User Journey</h3>
+
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Land on Homepage</strong><span>User arrives at the animal listing page. Browseable without an account.</span></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Browse &amp; Filter Animals</strong><span>Filter by species, size, gender, age. See animal cards with image, name, species, age.</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>View Animal Detail</strong><span>Full profile: description, requirements, tags, comments. Available to everyone.</span></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Register / Login</strong><span>Account required to interact. Email + password registration with email verification.</span></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Complete Profile</strong><span>Fill in housing type, garden, other pets, experience, motivation. Required before applying.</span><div class="step-lock">🔒 Auth required</div></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-body"><strong>Submit Adoption Application</strong><span>Select animal, add personal message. One application per animal. Status: pending.</span><div class="step-lock">🔒 Auth + Profile required</div></div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-body"><strong>Post Comments</strong><span>Leave comments on any animal's detail page. Visible to all visitors.</span><div class="step-lock">🔒 Auth required</div></div></div>
+      <div class="step"><div class="step-num">8</div><div class="step-body"><strong>Track Application Status</strong><span>User can see if their application is pending, approved, or rejected from their profile area.</span></div></div>
+    </div>
+
+    <!-- ADMIN JOURNEY -->
+    <div class="journey-col a">
+      <h3><span class="dot" style="background:#a78bfa"></span>Admin / Staff Journey</h3>
+
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Login to Admin Panel</strong><span>Access via /admin. Secured role. Uses EasyAdmin interface.</span><div class="step-lock">🔒 ROLE_ADMIN only</div></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Manage Animals</strong><span>Create, edit, delete animals. Set species, breed, size, availability, image, adoption requirements.</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Manage Species &amp; Tags</strong><span>Add/edit/remove species types and animal tags used for browsing and filtering.</span></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Review Adoption Applications</strong><span>See all pending applications. Review user profile info. Approve or reject each application.</span></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Manage Users</strong><span>View registered users, check profiles, manage roles.</span></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-body"><strong>Manage Navbar &amp; Footer</strong><span>⭐ Sprint 4 feature. Edit navigation items from the admin panel. Dynamic layout driven by database.</span></div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-body"><strong>Moderate Comments</strong><span>Review and remove inappropriate comments from animal pages.</span></div></div>
+    </div>
+  </div>
+
+  <!-- PAGES OVERVIEW -->
+  <div style="margin-top:32px">
+    <div class="section-label" style="margin-bottom:12px">Pages Required — Sprint 4</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px">
+      <div style="background:#162032;border:1px solid #3b82f620;border-radius:7px;padding:10px 16px;font-size:.76rem">
+        <div style="color:#93c5fd;font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;margin-bottom:4px">Public</div>
+        <div style="color:#e6edf3;display:flex;flex-direction:column;gap:4px">
+          <span>/ &nbsp;&nbsp;→ Animal listing</span>
+          <span>/animal/{id} &nbsp;→ Animal detail</span>
+          <span>/register → Registration form</span>
+          <span>/login &nbsp;&nbsp;&nbsp;→ Login form</span>
+        </div>
+      </div>
+      <div style="background:#1a3a2a;border:1px solid #4ade8020;border-radius:7px;padding:10px 16px;font-size:.76rem">
+        <div style="color:#4ade80;font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;margin-bottom:4px">Authenticated</div>
+        <div style="color:#e6edf3;display:flex;flex-direction:column;gap:4px">
+          <span>/profile &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ View/Edit profile</span>
+          <span>/adopt/{id} &nbsp;&nbsp;&nbsp;→ Adoption form</span>
+          <span>/applications &nbsp;→ My applications</span>
+        </div>
+      </div>
+      <div style="background:#1a0d2a;border:1px solid #a78bfa20;border-radius:7px;padding:10px 16px;font-size:.76rem">
+        <div style="color:#c4b5fd;font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;margin-bottom:4px">Admin (/admin)</div>
+        <div style="color:#e6edf3;display:flex;flex-direction:column;gap:4px">
+          <span>Animals CRUD</span>
+          <span>Applications management</span>
+          <span>Users management</span>
+          <span>Navbar/Footer items ⭐</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────
+     PANEL 2: DB SCHEMA
+───────────────────────────────────── -->
+<div id="panel-schema" class="panel">
+  <div class="section-label">Database Schema</div>
+  <div class="section-title">Entity Structure &amp; Relationships</div>
+  <div class="section-desc">
+    All entities, fields, and their types. Gold fields = Primary Key, Blue fields = Foreign Key. Relations are listed below.
+  </div>
+
+  <div class="schema-grid">
+    <!-- USERS -->
+    <div class="entity e-users">
+      <div class="entity-header"><span class="icon">👤</span>users</div>
+      <div class="entity-fields">
+        <div class="field pk"><span class="field-name">id</span><span class="field-type">int PK</span></div>
+        <div class="entity-divider"></div>
+        <div class="field"><span class="field-name">email</span><span class="field-type">varchar(180)</span></div>
+        <div class="field"><span class="field-name">password</span><span class="field-type">varchar(255)</span></div>
+        <div class="field special"><span class="field-name">roles</span><span class="field-type">text (JSON)</span></div>
+        <div class="field"><span class="field-name">is_verified</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-name">created_at</span><span class="field-type">datetime</span></div>
+        <div class="field"><span class="field-name">updated_at</span><span class="field-type">datetime</span></div>
+      </div>
+    </div>
+
+    <!-- PROFILES -->
+    <div class="entity e-profiles">
+      <div class="entity-header"><span class="icon">📋</span>profiles</div>
+      <div class="entity-fields">
+        <div class="field pk"><span class="field-name">id</span><span class="field-type">int PK</span></div>
+        <div class="field fk"><span class="field-name">user_id</span><span class="field-type">int FK</span></div>
+        <div class="field fk"><span class="field-name">housing_type_id</span><span class="field-type">int FK</span></div>
+        <div class="entity-divider"></div>
+        <div class="field"><span class="field-name">first_name</span><span class="field-type">varchar(100)</span></div>
+        <div class="field"><span class="field-name">last_name</span><span class="field-type">varchar(100)</span></div>
+        <div class="field"><span class="field-name">phone</span><span class="field-type">varchar(50)</span></div>
+        <div class="field"><span class="field-name">address / city</span><span class="field-type">varchar</span></div>
+        <div class="field"><span class="field-name">has_garden</span><span class="field-type">boolean</span></div>
+        <div class="field"><span class="field-name">has_other_pets</span><span class="field-type">boolean</span></div>
+        <div class="field special"><span class="field-name">pet_experience</span><span class="field-type">enum low/med/high</span></div>
+        <div class="field"><span class="field-name">motivation</span><span class="field-type">text</span></div>
+      </div>
+    </div>
+
+    <!-- ANIMALS -->
+    <div class="entity e-animals">
+      <div class="entity-header"><span class="icon">🐾</span>animals</div>
+      <div class="entity-fields">
+        <div class="field pk"><span class="field-name">id</span><span class="field-type">int PK</span></div>
+        <div class="field fk"><span class="field-name">species_id</span><span class="field-type">int FK</span></div>
+        <div class="entity-divider"></div>
+        <div class="field"><span class="field-name">name</span><span class="field-type">varchar(100)</span></div>
+        <div class="field"><span class="field-name">breed</span><span class="field-type">varchar(100)</span></div>
+        <div class="field"><span class="field-name">age</span><span class="field-type">int</span></div>
+        <div class="field special"><span class="field-name">gender</span><span class="field-type">enum male/female</span></div>
+        <div class="field special"><span class="field-name">size</span><span class="field-type">enum XS/S/M/L/XL</span></div>
+        <div class="field"><span class="field-name">image_url</span><span class="field-type">varchar(255)</span></div>
+        <div class="field"><span class="field-name">description</span><span class="field-type">text</span></div>
+        <div class="field"><span class="field-name">is_available</span><span class="field-type">boolean</span></div>
+      </div>
+    </div>
+
+    <!-- SPECIES -->
+    <div class="entity e-species">
+      <div class="entity-header"><span class="icon">🔬</span>species</div>
+      <div class="entity-fields">
+        <div class="field pk"><span class="field-name">id</span><span class="field-type">int PK</span></div>
+        <div class="entity-divider"></div>
+        <div class="field"><span class="field-name">name</span><span class="field-type">varchar(50)</span></div>
+      </div>
+    </div>
+
+    <!-- ADOPTION APPLICATIONS -->
+    <div class="entity e-applications">
+      <div class="entity-header"><span class="icon">📝</span>adoption_applications</div>
+      <div class="entity-fields">
+        <div class="field pk"><span class="field-name">id</span><span class="field-type">int PK</span></div>
+        <div class="field fk"><span class="field-name">user_id</span><span class="field-type">int FK</span></div>
+        <div class="field fk"><span class="field-name">animal_id</span><span class="field-type">int FK</span></div>
+        <div class="entity-divider"></div>
+        <div class="field"><span class="field-name">message</span><span class="field-type">text</span></div>
+        <div class="field special"><span class="field-name">status</span><span class="field-type">enum pending/approved/rejected</span></div>
+        <div class="field"><span class="field-name">created_at</span><span class="field-type">datetime</span></div>
+      </div>
+    </div>
+
+    <!-- COMMENTS -->
+    <div class="entity e-comments">
+      <div class="entity-header"><span class="icon">💬</span>comments</div>
+      <div class="entity-fields">
+        <div class="field pk"><span class="field-name">id</span><span class="field-type">int PK</span></div>
+        <div class="field fk"><span class="field-name">animal_id</span><span class="field-type">int FK</span></div>
+        <div class="field fk"><span class="field-name">user_id</span><span class="field-type">int FK</span></div>
+        <div class="entity-divider"></div>
+        <div class="field"><span class="field-name">content</span><span class="field-type">text</span></div>
+        <div class="field"><span class="field-name">created_at</span><span class="field-type">datetime</span></div>
+      </div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="entity e-tags">
+      <div class="entity-header"><span class="icon">🏷️</span>tags</div>
+      <div class="entity-fields">
+        <div class="field pk"><span class="field-name">id</span><span class="field-type">int PK</span></div>
+        <div class="entity-divider"></div>
+        <div class="field"><span class="field-name">name</span><span class="field-type">varchar(50)</span></div>
+      </div>
+    </div>
+
+    <!-- ANIMAL_TAGS -->
+    <div class="entity" style="border-color:#e879f920">
+      <div class="entity-header" style="background:#2a0d2a;color:#e879f9"><span class="icon">🔗</span>animal_tags</div>
+      <div class="entity-fields">
+        <div class="field fk"><span class="field-name">animal_id</span><span class="field-type">int FK</span></div>
+        <div class="field fk"><span class="field-name">tag_id</span><span class="field-type">int FK</span></div>
+        <div class="entity-divider"></div>
+        <div style="padding:4px 14px;font-size:.68rem;color:#6e7681;font-family:'DM Mono',monospace">pivot table (many-to-many)</div>
+      </div>
+    </div>
+
+    <!-- HOUSING TYPES -->
+    <div class="entity e-housing">
+      <div class="entity-header"><span class="icon">🏠</span>housing_types</div>
+      <div class="entity-fields">
+        <div class="field pk"><span class="field-name">id</span><span class="field-type">int PK</span></div>
+        <div class="entity-divider"></div>
+        <div class="field"><span class="field-name">name</span><span class="field-type">varchar(50)</span></div>
+        <div style="padding:4px 14px;font-size:.68rem;color:#6e7681;font-family:'DM Mono',monospace">e.g. apartment, house, farm</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="relations">
+    <h3>Key Relationships</h3>
+    <div class="rel-list">
+      <div class="rel"><span class="rel-from">users</span><span class="rel-arrow">──1:1──</span><span class="rel-to">profiles</span></div>
+      <div class="rel"><span class="rel-from">profiles</span><span class="rel-arrow">──N:1──</span><span class="rel-to">housing_types</span></div>
+      <div class="rel"><span class="rel-from">animals</span><span class="rel-arrow">──N:1──</span><span class="rel-to">species</span></div>
+      <div class="rel"><span class="rel-from">animals</span><span class="rel-arrow">──N:M──</span><span class="rel-to">tags</span><span class="rel-type">via animal_tags</span></div>
+      <div class="rel"><span class="rel-from">adoption_applications</span><span class="rel-arrow">──N:1──</span><span class="rel-to">users</span></div>
+      <div class="rel"><span class="rel-from">adoption_applications</span><span class="rel-arrow">──N:1──</span><span class="rel-to">animals</span></div>
+      <div class="rel"><span class="rel-from">comments</span><span class="rel-arrow">──N:1──</span><span class="rel-to">animals</span></div>
+      <div class="rel"><span class="rel-from">comments</span><span class="rel-arrow">──N:1──</span><span class="rel-to">users</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────
+     PANEL 3: SYSTEM ARCHITECTURE
+───────────────────────────────────── -->
+<div id="panel-arch" class="panel">
+  <div class="section-label">System Architecture</div>
+  <div class="section-title">Symfony MVC Stack — Full Picture</div>
+  <div class="section-desc">
+    How all layers connect: from browser request to database and back. Focus on the Symfony conventions the team must follow.
+  </div>
+
+  <div class="arch-diagram">
+
+    <!-- LAYER: Browser -->
+    <div class="arch-row">
+      <div class="arch-layer green" style="flex:none;width:100%">
+        <div class="arch-layer-title">🌐 Client Layer — Browser</div>
+        <div class="arch-items">
+          <div class="arch-item green">Animal Listing Page</div>
+          <div class="arch-item green">Animal Detail Page</div>
+          <div class="arch-item green">Register / Login Forms</div>
+          <div class="arch-item green">Profile Page</div>
+          <div class="arch-item green">Adoption Form</div>
+          <div class="arch-item purple">Admin Panel (EasyAdmin)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-divider">HTTP Request / Response</div>
+
+    <!-- LAYER: Router + Security -->
+    <div class="arch-row">
+      <div class="arch-layer blue" style="flex:2">
+        <div class="arch-layer-title">🔀 Symfony Router (routes.yaml / #[Route])</div>
+        <div class="arch-items">
+          <div class="arch-item blue">GET /</div>
+          <div class="arch-item blue">GET /animal/{id}</div>
+          <div class="arch-item blue">POST /adopt/{id}</div>
+          <div class="arch-item blue">GET|POST /profile</div>
+          <div class="arch-item blue">GET|POST /register</div>
+          <div class="arch-item blue">GET|POST /login</div>
+        </div>
+      </div>
+      <div class="arch-layer red" style="flex:1">
+        <div class="arch-layer-title">🔒 Security Layer</div>
+        <div class="arch-items">
+          <div class="arch-item red">Firewall rules</div>
+          <div class="arch-item red">ROLE_USER check</div>
+          <div class="arch-item red">ROLE_ADMIN check</div>
+          <div class="arch-item red">Email verification</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-divider">Dispatched to Controller</div>
+
+    <!-- LAYER: Controllers -->
+    <div class="arch-row">
+      <div class="arch-layer amber" style="flex:1;width:100%">
+        <div class="arch-layer-title">🎮 Controllers (src/Controller)</div>
+        <div class="arch-items">
+          <div class="arch-item amber">AnimalController</div>
+          <div class="arch-item amber">AdoptionController</div>
+          <div class="arch-item amber">ProfileController</div>
+          <div class="arch-item amber">CommentController</div>
+          <div class="arch-item amber">RegistrationController</div>
+          <div class="arch-item amber">SecurityController</div>
+          <div class="arch-item gray">EasyAdmin (auto-generated)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-divider">Controller calls Services / Repositories</div>
+
+    <!-- LAYER: Doctrine + Twig -->
+    <div class="arch-row">
+      <div class="arch-layer purple" style="flex:2">
+        <div class="arch-layer-title">🗂️ Doctrine ORM — Entities &amp; Repositories (src/Entity, src/Repository)</div>
+        <div class="arch-items">
+          <div class="arch-item purple">User entity</div>
+          <div class="arch-item purple">Animal entity</div>
+          <div class="arch-item purple">Profile entity</div>
+          <div class="arch-item purple">AdoptionApplication entity</div>
+          <div class="arch-item purple">Comment entity</div>
+          <div class="arch-item purple">Tag / Species entities</div>
+          <div class="arch-item purple">NavbarItem entity ⭐</div>
+        </div>
+      </div>
+      <div class="arch-layer cyan" style="flex:1">
+        <div class="arch-layer-title">🖼️ Twig Templates (templates/)</div>
+        <div class="arch-items">
+          <div class="arch-item cyan">base.html.twig</div>
+          <div class="arch-item cyan">animal/ views</div>
+          <div class="arch-item cyan">profile/ views</div>
+          <div class="arch-item cyan">auth/ views</div>
+          <div class="arch-item cyan">Dynamic navbar ⭐</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-divider">Doctrine talks to DB via PDO / MySQL Driver</div>
+
+    <!-- LAYER: Database -->
+    <div class="arch-row">
+      <div class="arch-layer green" style="width:100%;flex:none">
+        <div class="arch-layer-title">🗄️ Database — MySQL / MariaDB</div>
+        <div class="arch-items">
+          <div class="arch-item green">users</div>
+          <div class="arch-item green">profiles</div>
+          <div class="arch-item green">animals</div>
+          <div class="arch-item green">species</div>
+          <div class="arch-item green">adoption_applications</div>
+          <div class="arch-item green">comments</div>
+          <div class="arch-item green">tags + animal_tags</div>
+          <div class="arch-item green">housing_types</div>
+          <div class="arch-item amber">navbar_items ⭐</div>
+          <div class="arch-item amber">footer_items ⭐</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPRINT 4 MODULES -->
+  <div style="margin-top:32px">
+    <div class="section-label" style="margin-bottom:14px">Sprint 4 — Module Breakdown</div>
+    <div class="modules-grid">
+      <div class="module-card mc-green">
+        <div class="module-tag">Product Owner</div>
+        <h4>App Workflow Document</h4>
+        <p>Define the complete user journey. Describe every step from entry to adoption resolution. No technical details — just product logic.</p>
+        <div class="module-branch">feature/product-workflow</div>
+      </div>
+      <div class="module-card mc-blue">
+        <div class="module-tag">Tech Lead</div>
+        <h4>Dynamic Navbar &amp; Footer Structure</h4>
+        <p>Create NavbarItem / FooterItem entities. Build the admin panel CRUD for managing navigation. Prepare Twig injection point.</p>
+        <div class="module-branch">feature/dynamic-layout-structure</div>
+      </div>
+      <div class="module-card mc-amber">
+        <div class="module-tag">Frontend Developer</div>
+        <h4>Plain HTML Pages + Controller Connection</h4>
+        <p>Build all required pages in plain HTML — no Bootstrap. Connect each page to its Symfony controller via routes.</p>
+        <div class="module-branch">feature/plain-html-pages</div>
+      </div>
+      <div class="module-card mc-purple">
+        <div class="module-tag">Backend Developer</div>
+        <h4>CI/CD — GitHub Actions Pipeline</h4>
+        <p>Create a .github/workflows file. Automate at least one validation (e.g. composer install, PHPStan, or tests) on push/merge.</p>
+        <div class="module-branch">feature/github-actions-pipeline</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name, el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
