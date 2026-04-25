@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Profile;
 
-use App\Entity\Profile\Profile;
 use App\Form\ProfileType;
 use App\Repository\Profile\ProfileRepository;
 use Doctrine\ORM\EntityManagerInterface;
