@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adopt a Pet - PetAdopt{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .pet-card {
+        border: 1px solid #e0d8ce;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: box-shadow 0.2s;
+    }
+
+    .pet-card:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .pet-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .badge-species {
+        display: inline-block;
+        background: #f5ede0;
+        color: #3b2f2f;
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 4px;
+        border: 1px solid #e0d8ce;
+        margin-bottom: 6px;
+    }
+
+    .btn-view {
+        font-size: 0.85rem;
+        border: 1px solid #3b2f2f;
+        color: #3b2f2f;
+        background: transparent;
+        padding: 5px 14px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-view:hover {
+        background-color: #3b2f2f;
+        color: #fff;
+    }
+
+    .page-header {
+        background-color: #f5ede0;
+        padding: 36px 0;
+        margin-bottom: 36px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container">
+        <h1 style="font-weight: bold; color: #2c2c2c;">Available Pets</h1>
+        <p style="color: #7a5c3e;">Find your perfect companion and give them a forever home.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for animal in animals %}
+        <div class="col-md-4 mb-4">
+            <div class="pet-card">
+                {% if animal.photoFilename %}
+                    <img src="{{ asset('uploads/' ~ animal.photoFilename) }}" alt="{{ animal.name }}">
+                {% else %}
+                    <img src="https://placehold.co/400x200/e8ddd0/3b2f2f?text={{ animal.name }}" alt="{{ animal.name }}">
+                {% endif %}
+                <div style="padding: 14px;">
+                    <span class="badge-species">{{ animal.species ? animal.species.name : 'Pet' }}</span>
+                    <h5 style="font-weight: bold; margin-bottom: 4px;">{{ animal.name }}</h5>
+                    <p style="font-size: 0.85rem; color: #7a5c3e; margin-bottom: 6px;">
+                        {{ animal.age ? animal.age ~ ' years old' : 'Age unknown' }} •
+                        {{ animal.location ?? 'Location unknown' }}
+                    </p>
+                    {% if animal.animalTags is not empty %}
+                    <p style="margin-bottom: 10px;">
+                        {% for animalTag in animal.animalTags %}
+                            <span class="badge bg-secondary" style="font-size: 0.75rem;">{{ animalTag.tag.name }}</span>
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                    <a href="{{ path('animal_detail', { id: animal.id }) }}" class="btn-view">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <p class="text-muted">No animals found yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
