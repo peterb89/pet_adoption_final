@@ -4,7 +4,7 @@ namespace App\Entity\Animals;
 
 use App\Entity\Animals\Animal;
 use App\Entity\Authentification\User;
-use App\Repository\AnimalCommentRepository;
+use App\Repository\Animals\AnimalCommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -36,6 +36,7 @@ class AnimalComment
     public function __construct()
     {
         $this->author = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -101,5 +102,16 @@ class AnimalComment
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        if (!$this->message) {
+            return sprintf('Comment #%d', $this->id ?? 0);
+        }
+
+        $message = strip_tags($this->message);
+
+        return strlen($message) > 40 ? substr($message, 0, 40) . '...' : $message;
     }
 }

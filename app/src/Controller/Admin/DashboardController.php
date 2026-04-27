@@ -11,8 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 use App\Controller\Admin\Authentification\UserCrudController;
 
-use App\Controller\Admin\Profile\ProfileCrudController;
-use App\Controller\Admin\Profile\HousingTypeCrudController;
+use App\Controller\Admin\Authentification\Profile\ProfileCrudController;
+use App\Controller\Admin\Authentification\Profile\HousingTypeCrudController;
 
 use App\Controller\Admin\Animals\AnimalCrudController;
 use App\Controller\Admin\Animals\AnimalTagCrudController;
@@ -44,17 +44,17 @@ class DashboardController extends AbstractDashboardController
     {
 
         yield MenuItem::section('Users');
-        yield MenuItem::linkTo(UserCrudController::class, 'Users', 'fas fa-users');
+        yield MenuItem::linkToRoute('Users', 'fas fa-users', 'admin_user_index');
 
         yield MenuItem::section('Profiles');
-        yield MenuItem::linkTo(ProfileCrudController::class, 'Profiles', 'fas fa-user');
-        yield MenuItem::linkTo(HousingTypeCrudController::class, 'Housing Types', 'fas fa-home');
+        yield MenuItem::linkToRoute('Profiles', 'fas fa-user', 'admin_profile_index');
+        yield MenuItem::linkToRoute('Housing Types', 'fas fa-home', 'admin_housing_type_index');
 
         yield MenuItem::section('Animals');
-        yield MenuItem::linkTo(AnimalCrudController::class, 'Animals', 'fas fa-paw');
-        yield MenuItem::linkTo(AnimalCommentCrudController::class, 'Comments', 'fas fa-comments');
-        yield MenuItem::linkTo(AnimalTagCrudController::class, 'Animal Tags', 'fas fa-tags');
-        yield MenuItem::linkTo(SpeciesCrudController::class, 'Species', 'fas fa-dna');
-        yield MenuItem::linkTo(TagCrudController::class, 'Tags', 'fas fa-tag');
+        yield MenuItem::linkToRoute('Animals', 'fas fa-paw', 'admin_animal_index');
+        yield MenuItem::linkToRoute('Comments', 'fas fa-comments', 'admin_animal_comment_index');
+        yield MenuItem::linkToRoute('Animal Tags', 'fas fa-tags', 'admin_animal_tag_index');
+        yield MenuItem::linkToRoute('Species', 'fas fa-dna', 'admin_species_index');
+        yield MenuItem::linkToRoute('Tags', 'fas fa-tag', 'admin_tag_index');
     }
 }

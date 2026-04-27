@@ -2,7 +2,7 @@
 
 namespace App\Entity\Animals;
 
-use App\Repository\SpeciesRepository;
+use App\Repository\Animals\SpeciesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SpeciesRepository::class)]
@@ -31,5 +31,10 @@ class Species
         $this->name = $name;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
     }
 }
