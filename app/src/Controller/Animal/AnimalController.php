@@ -2,10 +2,10 @@
 
 namespace App\Controller\Animal;
 
-use App\Repository\AnimalRepository;
+use App\Repository\Animals\AnimalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AnimalController extends AbstractController
 {

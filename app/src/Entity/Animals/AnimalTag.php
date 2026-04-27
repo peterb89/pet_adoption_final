@@ -2,7 +2,7 @@
 
 namespace App\Entity\Animals;
 
-use App\Repository\AnimalTagRepository;
+use App\Repository\Animals\AnimalTagRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnimalTagRepository::class)]
@@ -46,5 +46,13 @@ class AnimalTag
         $this->tag = $tag;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        $animal = $this->animal ? (string) $this->animal : 'Animal';
+        $tag = $this->tag ? (string) $this->tag : 'Tag';
+
+        return sprintf('%s - %s', $animal, $tag);
     }
 }

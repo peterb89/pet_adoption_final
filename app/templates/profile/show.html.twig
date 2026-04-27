@@ -1,29 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profile: {{ profile.firstName }}{% endblock %}
+{% block title %}Profile - PetAdopt{% endblock %}
 
 {% block body %}
-<div style="max-width: 800px; margin: 20px auto; font-family: sans-serif;">
-    <div style="display: flex; gap: 20px; align-items: center;">
-        <!-- Profile picture location (Placeholder) -->
-        <div style="width: 150px; height: 150px; background: #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 50px;">
-            {{ profile.firstName|first }}{{ profile.lastName|first }}
-        </div>
-
-        <div>
-            <h1 style="margin: 0;">{{ profile.firstName }} {{ profile.lastName }}</h1>
-            <p style="color: #666;">Location: {{ profile.city }}, {{ profile.address }}</p>
-            <!-- Edit button -->
-            <a href="{{ path('app_profile_edit') }}" style="display: inline-block; background: #2ea44f; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold;">Edit Profile</a>
-        </div>
+<section class="page-hero">
+    <div class="container">
+        <h1 class="fw-bold mb-2">Adoption Profile</h1>
+        <p class="text-muted mb-0">Keep your personal and housing information ready for adoption requests.</p>
     </div>
+</section>
 
-    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+<main class="container" style="max-width: 900px;">
+    {% if profile %}
+        <div class="content-card p-4 p-md-5">
+            <div class="d-flex flex-column flex-md-row gap-4 align-items-md-center mb-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 120px; height: 120px; background: var(--mint); font-size: 2rem;">
+                    {{ profile.firstName|first }}{{ profile.lastName|first }}
+                </div>
 
-    <div>
-        <h3>About</h3>
-        <p>Housing Type: {{ profile.housingType }}</p>
-        <p>Phone: {{ profile.phoneNumber }}</p>
-    </div>
-</div>
+                <div class="flex-grow-1">
+                    <h2 class="fw-bold mb-1">{{ profile.firstName }} {{ profile.lastName }}</h2>
+                    <p class="text-muted mb-3">{{ profile.city }}, {{ profile.address }}</p>
+                    <a href="{{ path('app_profile_edit') }}" class="btn btn-mint">Edit profile</a>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Phone</p>
+                    <p class="fw-semibold mb-0">{{ profile.phoneNumber ?? 'Not provided' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="text-muted mb-1">Housing type</p>
+                    <p class="fw-semibold mb-0">{{ profile.housingType ? profile.housingType.name : 'Not provided' }}</p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="content-card p-5 text-center">
+            <h2 class="h4 fw-bold">No profile found</h2>
+            <p class="text-muted mb-0">Create a profile record from the admin panel or adapt the controller to create one for the logged user.</p>
+        </div>
+    {% endif %}
+</main>
 {% endblock %}

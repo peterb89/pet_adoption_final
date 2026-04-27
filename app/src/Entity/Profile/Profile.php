@@ -74,4 +74,8 @@ class Profile
         $this->housingType = $h;
         return $this;
     }
+    public function __toString(): string
+    {
+        return trim(sprintf('%s %s', $this->firstName ?? '', $this->lastName ?? ''));
+    }
 }
