@@ -2,6 +2,7 @@
 
 namespace App\Entity\Authentification;
 
+use App\Entity\AdoptionApplication;
 use App\Entity\Animals\AnimalComment;
 use App\Repository\Authentification\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,9 +42,16 @@ class User
     #[ORM\ManyToMany(targetEntity: AnimalComment::class, mappedBy: 'author')]
     private Collection $animalComments;
 
+    /**
+     * @var Collection<int, AdoptionApplication>
+     */
+    #[ORM\OneToMany(targetEntity: AdoptionApplication::class, mappedBy: 'user')]
+    private Collection $adoptionApplications;
+
     public function __construct()
     {
         $this->animalComments = new ArrayCollection();
+        $this->adoptionApplications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,4 +157,41 @@ class User
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, AdoptionApplication>
+     */
+    public function getAdoptionApplications(): Collection
+    {
+        return $this->adoptionApplications;
+    }
+
+    public function addAdoptionApplication(AdoptionApplication $adoptionApplication): static
+    {
+        if (!$this->adoptionApplications->contains($adoptionApplication)) {
+            $this->adoptionApplications->add($adoptionApplication);
+            $adoptionApplication->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdoptionApplication(AdoptionApplication $adoptionApplication): static
+    {
+        if ($this->adoptionApplications->removeElement($adoptionApplication)) {
+            // set the owning side to null (unless already changed)
+            if ($adoptionApplication->getUser() === $this) {
+                $adoptionApplication->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
+    public function __toString(): string
+    {
+        return $this->email ?? 'New User';
+    }
+    // -------------------------------
 }

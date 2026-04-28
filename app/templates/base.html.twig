@@ -104,7 +104,8 @@
 
         <nav class="navbar navbar-expand-lg sticky-top">
             <div class="container">
-                <a class="navbar-brand" href="{{ path('home') }}">
+                <!-- JAVÍTVA: path helyett # -->
+                <a class="navbar-brand" href="#">
                     Pet<span>Adopt</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -112,8 +113,8 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item"><a class="nav-link" href="{{ path('home') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ path('animal_index') }}">Adopt</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Adopt</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">How It Works</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
@@ -138,8 +139,9 @@
                     <div class="col-md-3 mb-3">
                         <h6>Quick Links</h6>
                         <ul class="list-unstyled">
-                            <li><a href="{{ path('home') }}">Home</a></li>
-                            <li><a href="{{ path('animal_index') }}">Adopt</a></li>
+                            
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Adopt</a></li>
                             <li><a href="#">About Us</a></li>
                             <li><a href="#">Contact</a></li>
                         </ul>
