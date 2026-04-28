@@ -1,54 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ animal.name }}{% endblock %}
+{% block title %}{{ animal.name }} - PetAdopt{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
+<section class="page-hero">
+    <div class="container">
+        <a href="{{ path('animal_index') }}" class="btn btn-outline-mint btn-sm mb-3">
+            <i class="bi bi-arrow-left"></i> Back to animals
+        </a>
+        <h1 class="fw-bold mb-2">{{ animal.name }}</h1>
+        <p class="text-muted mb-0">Review this pet's basic information before applying.</p>
+    </div>
+</section>
 
-    <a href="{{ path('animal_index') }}" class="btn btn-secondary mb-3">Back to Animals</a>
+<main class="container">
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="content-card overflow-hidden">
+                <div class="pet-placeholder" style="height: 360px;">
+                    <i class="bi bi-heart-pulse"></i>
+                </div>
+            </div>
+        </div>
 
-    <h1>{{ animal.name }}</h1>
+        <div class="col-lg-7">
+            <div class="content-card p-4 p-lg-5">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <span class="badge badge-soft mb-2">{{ animal.species ? animal.species.name : 'Pet' }}</span>
+                        <h2 class="h3 fw-bold mb-0">{{ animal.name }}</h2>
+                    </div>
+                    <span class="badge text-bg-light border">{{ animal.status|capitalize }}</span>
+                </div>
 
-    {% if animal.photoFilename %}
-        <img src="{{ asset('uploads/' ~ animal.photoFilename) }}" alt="{{ animal.name }}" class="img-fluid mb-3" style="max-height: 400px;">
-    {% else %}
-        <img src="https://placehold.co/800x400?text=No+Photo" alt="No photo" class="img-fluid mb-3">
-    {% endif %}
+                <dl class="row mb-4">
+                    <dt class="col-sm-4 text-muted">Breed</dt>
+                    <dd class="col-sm-8">{{ animal.breed ?? 'Unknown' }}</dd>
 
-    <table class="table table-bordered">
-        <tr>
-            <th>Species</th>
-            <td>{{ animal.species ? animal.species.name : 'Unknown' }}</td>
-        </tr>
-        <tr>
-            <th>Breed</th>
-            <td>{{ animal.breed ?? 'Unknown' }}</td>
-        </tr>
-        <tr>
-            <th>Age</th>
-            <td>{{ animal.age ? animal.age ~ ' years' : 'Unknown' }}</td>
-        </tr>
-        <tr>
-            <th>Location</th>
-            <td>{{ animal.location ?? 'Unknown' }}</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>{{ animal.status }}</td>
-        </tr>
-        <tr>
-            <th>Tags</th>
-            <td>
-                {% if animal.animalTags is not empty %}
-                    {% for animalTag in animal.animalTags %}
-                        <span class="badge bg-secondary">{{ animalTag.tag.name }}</span>
-                    {% endfor %}
-                {% else %}
-                    No tags
-                {% endif %}
-            </td>
-        </tr>
-    </table>
+                    <dt class="col-sm-4 text-muted">Age</dt>
+                    <dd class="col-sm-8">{{ animal.age ? animal.age ~ ' years old' : 'Unknown' }}</dd>
 
-</div>
+                    <dt class="col-sm-4 text-muted">Location</dt>
+                    <dd class="col-sm-8">{{ animal.location ?? 'Unknown' }}</dd>
+
+                    <dt class="col-sm-4 text-muted">Status</dt>
+                    <dd class="col-sm-8">{{ animal.status|capitalize }}</dd>
+                </dl>
+
+                <a href="{{ path('app_profile_edit') }}" class="btn btn-mint px-4">
+                    Prepare adoption profile
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}

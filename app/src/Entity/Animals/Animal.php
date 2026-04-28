@@ -3,7 +3,7 @@
 namespace App\Entity\Animals;
 
 use App\Entity\Animals\AnimalComment;
-use App\Repository\AnimalRepository;
+use App\Repository\Animals\AnimalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -150,5 +150,10 @@ class Animal
         }
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
     }
 }

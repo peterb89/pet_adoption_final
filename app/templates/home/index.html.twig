@@ -2,101 +2,86 @@
 
 {% block title %}Adopt a Pet - PetAdopt{% endblock %}
 
-{% block stylesheets %}
-<style>
-    .pet-card {
-        border: 1px solid #e0d8ce;
-        border-radius: 10px;
-        overflow: hidden;
-        transition: box-shadow 0.2s;
-    }
-
-    .pet-card:hover {
-        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-
-    .pet-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-
-    .badge-species {
-        display: inline-block;
-        background: #f5ede0;
-        color: #3b2f2f;
-        font-size: 0.75rem;
-        padding: 3px 8px;
-        border-radius: 4px;
-        border: 1px solid #e0d8ce;
-        margin-bottom: 6px;
-    }
-
-    .btn-view {
-        font-size: 0.85rem;
-        border: 1px solid #3b2f2f;
-        color: #3b2f2f;
-        background: transparent;
-        padding: 5px 14px;
-        border-radius: 4px;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .btn-view:hover {
-        background-color: #3b2f2f;
-        color: #fff;
-    }
-
-    .page-header {
-        background-color: #f5ede0;
-        padding: 36px 0;
-        margin-bottom: 36px;
-    }
-</style>
-{% endblock %}
-
 {% block body %}
-
-<div class="page-header">
+<section class="page-hero">
     <div class="container">
-        <h1 style="font-weight: bold; color: #2c2c2c;">Available Pets</h1>
-        <p style="color: #7a5c3e;">Find your perfect companion and give them a forever home.</p>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row">
-        {% for animal in animals %}
-        <div class="col-md-4 mb-4">
-            <div class="pet-card">
-                {% if animal.photoFilename %}
-                    <img src="{{ asset('uploads/' ~ animal.photoFilename) }}" alt="{{ animal.name }}">
-                {% else %}
-                    <img src="https://placehold.co/400x200/e8ddd0/3b2f2f?text={{ animal.name }}" alt="{{ animal.name }}">
-                {% endif %}
-                <div style="padding: 14px;">
-                    <span class="badge-species">{{ animal.species ? animal.species.name : 'Pet' }}</span>
-                    <h5 style="font-weight: bold; margin-bottom: 4px;">{{ animal.name }}</h5>
-                    <p style="font-size: 0.85rem; color: #7a5c3e; margin-bottom: 6px;">
-                        {{ animal.age ? animal.age ~ ' years old' : 'Age unknown' }} •
-                        {{ animal.location ?? 'Location unknown' }}
-                    </p>
-                    {% if animal.animalTags is not empty %}
-                    <p style="margin-bottom: 10px;">
-                        {% for animalTag in animal.animalTags %}
-                            <span class="badge bg-secondary" style="font-size: 0.75rem;">{{ animalTag.tag.name }}</span>
-                        {% endfor %}
-                    </p>
-                    {% endif %}
-                    <a href="{{ path('animal_detail', { id: animal.id }) }}" class="btn-view">View Details</a>
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="badge badge-soft mb-3">Responsible adoption</span>
+                <h1 class="display-5 fw-bold mb-3">Adopt a pet and give them a safe home.</h1>
+                <p class="lead text-muted mb-4">Browse available animals, review their details, and start your adoption journey from one simple platform.</p>
+                <a href="{{ path('animal_index') }}" class="btn btn-mint px-4 py-2">Browse animals</a>
+            </div>
+            <div class="col-lg-5">
+                <div class="content-card p-5 text-center">
+                    <i class="bi bi-house-heart display-1 text-mint"></i>
+                    <h2 class="h4 fw-bold mt-3">Find your companion</h2>
+                    <p class="text-muted mb-0">Every adoption starts with the right match.</p>
                 </div>
             </div>
         </div>
+    </div>
+</section>
+
+<main class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Recently added pets</h2>
+            <p class="text-muted mb-0">A quick look at pets currently available.</p>
+        </div>
+        <a href="{{ path('animal_index') }}" class="btn btn-outline-mint">View all</a>
+    </div>
+
+    <div class="row g-4">
+        {% for animal in animals|slice(0, 6) %}
+            <div class="col-md-6 col-lg-4">
+                <article class="content-card pet-card">
+                    <div class="pet-placeholder">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="h5 fw-bold mb-1">{{ animal.name }}</h3>
+                        <p class="text-muted small mb-3">
+                            {{ animal.species ? animal.species.name : 'Pet' }} ·
+                            {{ animal.age ? animal.age ~ ' years old' : 'Age unknown' }} ·
+                            {{ animal.location ?? 'Location unknown' }}
+                        </p>
+                        <a href="{{ path('animal_detail', { id: animal.id }) }}" class="btn btn-mint w-100">View details</a>
+                    </div>
+                </article>
+            </div>
         {% else %}
-            <p class="text-muted">No animals found yet.</p>
+            <div class="col-12">
+                <div class="content-card p-5 text-center">
+                    <h3 class="h5 fw-bold">No pets available yet</h3>
+                    <p class="text-muted mb-0">Add animals from the admin panel to show them here.</p>
+                </div>
+            </div>
         {% endfor %}
     </div>
-</div>
 
+    <section id="how-it-works" class="row g-4 mt-5">
+        <div class="col-md-4">
+            <div class="content-card p-4 h-100">
+                <i class="bi bi-search h2 text-mint"></i>
+                <h3 class="h5 fw-bold mt-3">Search</h3>
+                <p class="text-muted mb-0">Review pets by species, age, location, and adoption status.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="content-card p-4 h-100">
+                <i class="bi bi-card-checklist h2 text-mint"></i>
+                <h3 class="h5 fw-bold mt-3">Apply</h3>
+                <p class="text-muted mb-0">Prepare your adoption profile and explain your living situation.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="content-card p-4 h-100">
+                <i class="bi bi-house-heart h2 text-mint"></i>
+                <h3 class="h5 fw-bold mt-3">Adopt</h3>
+                <p class="text-muted mb-0">The admin team reviews each request before approval.</p>
+            </div>
+        </div>
+    </section>
+</main>
 {% endblock %}

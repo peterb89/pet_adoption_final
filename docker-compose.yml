@@ -14,10 +14,12 @@ services:
       bash -c "
       cd /var/www/html/app &&
       mkdir -p var/cache var/log &&
-      chown -R www-data:www-data var &&
       if [ ! -f vendor/autoload_runtime.php ]; then
-        composer install
+        composer install --no-interaction
       fi &&
+      rm -rf var/cache/* &&
+      php bin/console asset-map:compile --no-interaction &&
+      chown -R www-data:www-data var &&
       apache2-foreground
       "
 

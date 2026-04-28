@@ -13,7 +13,7 @@ class NavigationItem
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\Column(length: 20)]
@@ -37,7 +37,7 @@ class NavigationItem
     #[ORM\Column]
     private ?int $position = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $location = null;
 
     public function getId(): ?int
@@ -53,7 +53,6 @@ class NavigationItem
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -65,7 +64,6 @@ class NavigationItem
     public function setType(string $type): static
     {
         $this->type = $type;
-
         return $this;
     }
 
@@ -77,7 +75,6 @@ class NavigationItem
     public function setRouteName(?string $routeName): static
     {
         $this->routeName = $routeName;
-
         return $this;
     }
 
@@ -89,7 +86,6 @@ class NavigationItem
     public function setUrl(?string $url): static
     {
         $this->url = $url;
-
         return $this;
     }
 
@@ -101,7 +97,6 @@ class NavigationItem
     public function setCssClass(?string $cssClass): static
     {
         $this->cssClass = $cssClass;
-
         return $this;
     }
 
@@ -113,7 +108,6 @@ class NavigationItem
     public function setImageUrl(?string $imageUrl): static
     {
         $this->imageUrl = $imageUrl;
-
         return $this;
     }
 
@@ -125,7 +119,6 @@ class NavigationItem
     public function setRequiredRole(?string $requiredRole): static
     {
         $this->requiredRole = $requiredRole;
-
         return $this;
     }
 
@@ -137,7 +130,6 @@ class NavigationItem
     public function setPosition(int $position): static
     {
         $this->position = $position;
-
         return $this;
     }
 
@@ -149,7 +141,6 @@ class NavigationItem
     public function setLocation(string $location): static
     {
         $this->location = $location;
-
         return $this;
     }
 }

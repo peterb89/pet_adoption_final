@@ -1,50 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Animals{% endblock %}
+{% block title %}Available Animals - PetAdopt{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
+<section class="page-hero">
+    <div class="container">
+        <span class="badge badge-soft mb-3">Adoption center</span>
+        <h1 class="fw-bold mb-2">Available Animals</h1>
+        <p class="text-muted mb-0">Find a pet that matches your home, lifestyle, and adoption goals.</p>
+    </div>
+</section>
 
-    <h1>Available Animals</h1>
-
-    <div class="row">
+<main class="container">
+    <div class="row g-4">
         {% for animal in animals %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
+            <div class="col-md-6 col-lg-4">
+                <article class="content-card pet-card">
+                    <div class="pet-placeholder">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
 
-                {% if animal.photoFilename %}
-                    <img src="{{ asset('uploads/' ~ animal.photoFilename) }}" class="card-img-top" alt="{{ animal.name }}">
-                {% else %}
-                    <img src="https://placehold.co/400x200?text=No+Photo" class="card-img-top" alt="No photo">
-                {% endif %}
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
+                            <div>
+                                <h2 class="h5 fw-bold mb-1">{{ animal.name }}</h2>
+                                <span class="badge badge-soft">{{ animal.species ? animal.species.name : 'Pet' }}</span>
+                            </div>
+                            <span class="badge text-bg-light border">{{ animal.status|capitalize }}</span>
+                        </div>
 
-                <div class="card-body">
-                    <h5 class="card-title">{{ animal.name }}</h5>
+                        <p class="text-muted small mb-3">
+                            {{ animal.breed ?? 'Breed unknown' }} ·
+                            {{ animal.age ? animal.age ~ ' years old' : 'Age unknown' }} ·
+                            {{ animal.location ?? 'Location unknown' }}
+                        </p>
 
-                    <p class="card-text">
-                        <strong>Species:</strong> {{ animal.species ? animal.species.name : 'Unknown' }}<br>
-                        <strong>Age:</strong> {{ animal.age ? animal.age ~ ' years' : 'Unknown' }}<br>
-                        <strong>Status:</strong> {{ animal.status }}<br>
-                        <strong>Location:</strong> {{ animal.location ?? 'Unknown' }}
-                    </p>
-
-                    {% if animal.animalTags is not empty %}
-                    <p>
-                        {% for animalTag in animal.animalTags %}
-                            <span class="badge bg-secondary">{{ animalTag.tag.name }}</span>
-                        {% endfor %}
-                    </p>
-                    {% endif %}
-
-                    <a href="{{ path('animal_detail', { id: animal.id }) }}" class="btn btn-primary">View Details</a>
-                </div>
-
+                        <a href="{{ path('animal_detail', { id: animal.id }) }}" class="btn btn-mint w-100">
+                            View details
+                        </a>
+                    </div>
+                </article>
             </div>
-        </div>
         {% else %}
-            <p>No animals found.</p>
+            <div class="col-12">
+                <div class="content-card p-5 text-center">
+                    <i class="bi bi-search display-5 text-mint"></i>
+                    <h2 class="h4 fw-bold mt-3">No animals found</h2>
+                    <p class="text-muted mb-0">There are no available animals yet.</p>
+                </div>
+            </div>
         {% endfor %}
     </div>
-
-</div>
+</main>
 {% endblock %}

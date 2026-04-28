@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin\Profile;
+namespace App\Controller\Admin\Authentification\Profile;
 
 use App\Entity\Profile\HousingType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
