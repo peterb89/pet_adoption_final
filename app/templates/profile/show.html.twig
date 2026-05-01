@@ -18,6 +18,14 @@
                     {{ profile.firstName|first }}{{ profile.lastName|first }}
                 </div>
 
+                
+    {% if not isComplete %}
+            <div class="alert alert-danger mt-3" style="background-color: #ffebe9; border: 1px solid #ff8182; color: #cf222e; padding: 10px; border-radius: 6px; font-weight: bold;">
+                <i class="bi bi-exclamation-triangle-fill"></i> Your profile is incomplete! 
+                Please fill in all details to be eligible for adoption.
+            </div>
+    {% endif %}    
+
                 <div class="flex-grow-1">
                     <h2 class="fw-bold mb-1">{{ profile.firstName }} {{ profile.lastName }}</h2>
                     <p class="text-muted mb-3">{{ profile.city }}, {{ profile.address }}</p>

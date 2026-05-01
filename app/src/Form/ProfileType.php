@@ -17,7 +17,9 @@ class ProfileType extends AbstractType
         $builder
             ->add('firstName')
             ->add('lastName')
-            ->add('phoneNumber')
+            ->add('phoneNumber', null, [
+                'required' => true,
+            ])
             ->add('city')
             ->add('address')
             ->add('motivation', TextareaType::class, [

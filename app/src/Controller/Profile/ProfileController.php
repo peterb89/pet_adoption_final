@@ -2,24 +2,29 @@
 
 namespace App\Controller\Profile;
 
+use App\Entity\Profile\Profile;
 use App\Form\ProfileType;
 use App\Repository\Profile\ProfileRepository;
+use App\Service\ProfileCompletenessService; 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route; // Modern Route elérési út
+use Symfony\Component\Routing\Attribute\Route;
 
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile_show')]
-    public function show(ProfileRepository $profileRepository): Response
-    {
-        // Megkeressük az első profilt a teszteléshez
+    public function show(
+        ProfileRepository $profileRepository, 
+        ProfileCompletenessService $completenessService 
+    ): Response {
         $profile = $profileRepository->findOneBy([]);
 
         return $this->render('profile/show.html.twig', [
             'profile' => $profile,
+            
+            'isComplete' => $completenessService->isProfileComplete($profile),
         ]);
     }
 
@@ -27,7 +32,6 @@ class ProfileController extends AbstractController
     public function edit(Request $request, ProfileRepository $profileRepository, EntityManagerInterface $entityManager): Response
     {
         $profile = $profileRepository->findOneBy([]);
-        
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
 
