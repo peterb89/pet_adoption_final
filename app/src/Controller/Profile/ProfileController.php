@@ -5,7 +5,8 @@ namespace App\Controller\Profile;
 use App\Entity\Profile\Profile;
 use App\Form\ProfileType;
 use App\Repository\Profile\ProfileRepository;
-use App\Service\ProfileCompletenessService; 
+use App\Repository\AdoptionApplicationRepository;
+use App\Service\ProfileCompletenessService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,13 +18,15 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'app_profile_show')]
     public function show(
         ProfileRepository $profileRepository, 
-        ProfileCompletenessService $completenessService 
+        AdoptionApplicationRepository $adoptionRepo,
+        ProfileCompletenessService $completenessService
     ): Response {
         $profile = $profileRepository->findOneBy([]);
+        $adoptions = $adoptionRepo->findAll();
 
         return $this->render('profile/show.html.twig', [
             'profile' => $profile,
-            
+            'adoptions' => $adoptions,
             'isComplete' => $completenessService->isProfileComplete($profile),
         ]);
     }
@@ -32,6 +35,7 @@ class ProfileController extends AbstractController
     public function edit(Request $request, ProfileRepository $profileRepository, EntityManagerInterface $entityManager): Response
     {
         $profile = $profileRepository->findOneBy([]);
+        
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
 
