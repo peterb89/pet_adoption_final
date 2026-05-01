@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     libicu-dev \
     libzip-dev \
-    && docker-php-ext-install pdo_mysql intl \
+    && docker-php-ext-install pdo_mysql intl zip \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,4 +23,4 @@ RUN sed -ri -e 's!/var/www/html!/var/www/html/app/public!g' \
     </Directory>\n' > /etc/apache2/conf-available/symfony.conf \
     && a2enconf symfony
 
-WORKDIR /var/www/html
+WORKDIR /var/www/html/app
