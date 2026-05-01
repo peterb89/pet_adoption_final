@@ -32,8 +32,11 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/edit', name: 'app_profile_edit')]
-    public function edit(Request $request, ProfileRepository $profileRepository, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request, 
+        ProfileRepository $profileRepository, 
+        EntityManagerInterface $entityManager
+    ): Response {
         $profile = $profileRepository->findOneBy([]);
         
         $form = $this->createForm(ProfileType::class, $profile);
