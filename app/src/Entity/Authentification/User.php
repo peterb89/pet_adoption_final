@@ -2,6 +2,7 @@
 
 namespace App\Entity\Authentification;
 
+use App\Entity\AdoptionApplication;
 use App\Entity\Animals\AnimalComment;
 use App\Repository\Authentification\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,9 +42,16 @@ class User
     #[ORM\ManyToMany(targetEntity: AnimalComment::class, mappedBy: 'author')]
     private Collection $animalComments;
 
+    /**
+     * @var Collection<int, AdoptionApplication>
+     */
+    #[ORM\OneToMany(targetEntity: AdoptionApplication::class, mappedBy: 'user')]
+    private Collection $adoptionApplications;
+
     public function __construct()
     {
         $this->animalComments = new ArrayCollection();
+        $this->adoptionApplications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,7 +67,6 @@ class User
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -71,7 +78,6 @@ class User
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -83,7 +89,6 @@ class User
     public function setRoles(string $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
@@ -95,7 +100,6 @@ class User
     public function setIsVerified(bool $is_verified): static
     {
         $this->is_verified = $is_verified;
-
         return $this;
     }
 
@@ -107,7 +111,6 @@ class User
     public function setCreatedAt(\DateTime $created_at): static
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
@@ -119,7 +122,6 @@ class User
     public function setUpdatedAt(\DateTime $updated_at): static
     {
         $this->updated_at = $updated_at;
-
         return $this;
     }
 
@@ -137,7 +139,6 @@ class User
             $this->animalComments->add($animalComment);
             $animalComment->addAuthor($this);
         }
-
         return $this;
     }
 
@@ -146,12 +147,38 @@ class User
         if ($this->animalComments->removeElement($animalComment)) {
             $animalComment->removeAuthor($this);
         }
+        return $this;
+    }
 
+    /**
+     * @return Collection<int, AdoptionApplication>
+     */
+    public function getAdoptionApplications(): Collection
+    {
+        return $this->adoptionApplications;
+    }
+
+    public function addAdoptionApplication(AdoptionApplication $adoptionApplication): static
+    {
+        if (!$this->adoptionApplications->contains($adoptionApplication)) {
+            $this->adoptionApplications->add($adoptionApplication);
+            $adoptionApplication->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeAdoptionApplication(AdoptionApplication $adoptionApplication): static
+    {
+        if ($this->adoptionApplications->removeElement($adoptionApplication)) {
+            if ($adoptionApplication->getUser() === $this) {
+                $adoptionApplication->setUser(null);
+            }
+        }
         return $this;
     }
 
     public function __toString(): string
     {
-        return $this->email ?? '';
+        return $this->email ?? 'New User';
     }
 }
