@@ -117,11 +117,21 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Adopt</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                </ul>
+    {% for item in dynamic_nav %}
+        {% if item.location == 'header' or item.location == 'navbar' %}
+            <li class="nav-item">
+                <a class="nav-link {{ item.cssClass }}" 
+                   href="{{ item.url ? item.url : (item.routeName ? path(item.routeName) : '#') }}">
+                    {% if item.type == 'logo' and item.imageUrl %}
+                        <img src="{{ asset(item.imageUrl) }}" alt="{{ item.name }}" style="height: 30px;">
+                    {% else %}
+                        {{ item.name }}
+                    {% endif %}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
 
                 <div class="d-flex gap-2">
                     
@@ -149,10 +159,17 @@
                 <div class="col-md-4 mb-3">
                     <h6>Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Adopt</a></li>
-                        <li><a href="#how-it-works">How It Works</a></li>
-                    </ul>
+    {% for item in dynamic_nav %}
+        {% if item.location == 'footer' %}
+            <li>
+                <a class="{{ item.cssClass }}" 
+                   href="{{ item.url ? item.url : (item.routeName ? path(item.routeName) : '#') }}">
+                    {{ item.name }}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
                 </div>
                 <div class="col-md-4 mb-3">
                     <h6>Contact</h6>
