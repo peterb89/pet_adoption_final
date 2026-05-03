@@ -56,5 +56,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('Animal Tags', 'fas fa-tags', 'admin_animal_tag_index');
         yield MenuItem::linkToRoute('Species', 'fas fa-dna', 'admin_species_index');
         yield MenuItem::linkToRoute('Tags', 'fas fa-tag', 'admin_tag_index');
+
+        yield MenuItem::section('Applications');
+        yield MenuItem::linkToUrl('Adoption Applications', 'fas fa-file-alt', '/admin/applications');
     }
 }

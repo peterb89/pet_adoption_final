@@ -4,6 +4,7 @@ namespace App\Entity\Authentification;
 
 use App\Entity\AdoptionApplication;
 use App\Entity\Animals\AnimalComment;
+use App\Entity\Profile\Profile;
 use App\Repository\Authentification\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -38,11 +39,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTime $updated_at = null;
 
+    /**
+     * @var Collection<int, AnimalComment>
+     */
     #[ORM\ManyToMany(targetEntity: AnimalComment::class, mappedBy: 'author')]
     private Collection $animalComments;
 
+    /**
+     * @var Collection<int, AdoptionApplication>
+     */
     #[ORM\OneToMany(targetEntity: AdoptionApplication::class, mappedBy: 'user')]
     private Collection $adoptionApplications;
+
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Profile::class)]
+    private ?Profile $profile = null;
 
     public function __construct()
     {
@@ -66,11 +76,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-
     public function getPassword(): ?string
     {
         return $this->password;
@@ -84,21 +89,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        $roles = json_decode($this->roles ?? '[]', true);
+        $roles = [];
 
-        if (!is_array($roles)) {
-            $roles = [];
+        if (is_string($this->roles) && $this->roles !== '') {
+            $decoded = json_decode($this->roles, true);
+            if (is_array($decoded)) {
+                $roles = $decoded;
+            }
         }
 
         $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        return array_values(array_unique($roles));
     }
 
-    public function setRoles(string|array $roles): static
+    public function setRoles(array $roles): static
     {
-        $this->roles = is_array($roles) ? json_encode($roles) : $roles;
+        $this->roles = json_encode(array_values(array_unique($roles)), JSON_THROW_ON_ERROR);
         return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
     }
 
     public function eraseCredentials(): void
@@ -138,6 +151,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, AnimalComment>
+     */
     public function getAnimalComments(): Collection
     {
         return $this->animalComments;
@@ -160,6 +176,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, AdoptionApplication>
+     */
     public function getAdoptionApplications(): Collection
     {
         return $this->adoptionApplications;
@@ -187,5 +206,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return $this->email ?? 'New User';
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
     }
 }
