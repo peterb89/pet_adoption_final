@@ -1,0 +1,179 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Applications - PetAdopt{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .page-header {
+        background-color: #f8fffe;
+        border-bottom: 1px solid #e0f5ec;
+        padding: 36px 0;
+        margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a1a1a;
+    }
+
+    .page-header p {
+        color: #777;
+        font-size: 0.95rem;
+    }
+
+    .application-card {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 14px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        transition: box-shadow 0.2s;
+    }
+
+    .application-card:hover {
+        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    }
+
+    .application-card img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .application-info {
+        flex: 1;
+    }
+
+    .application-info h5 {
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #1a1a1a;
+        margin-bottom: 2px;
+    }
+
+    .application-info .meta {
+        font-size: 0.83rem;
+        color: #888;
+        margin-bottom: 4px;
+    }
+
+    .application-info .message {
+        font-size: 0.85rem;
+        color: #555;
+        font-style: italic;
+        margin: 0;
+    }
+
+    .status-badge {
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 5px 14px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .status-pending {
+        background: #fff4d6;
+        color: #b88300;
+    }
+
+    .status-approved {
+        background: #d4f5e3;
+        color: #1f7d4a;
+    }
+
+    .status-rejected {
+        background: #fadcdc;
+        color: #b83232;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8fffe;
+        border-radius: 12px;
+        border: 1px dashed #d0ede0;
+    }
+
+    .empty-state i {
+        font-size: 2.5rem;
+        color: #6dbf9e;
+        margin-bottom: 12px;
+    }
+
+    .empty-state h5 {
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 6px;
+    }
+
+    .empty-state p {
+        color: #777;
+        margin-bottom: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container">
+        <h1>My Applications</h1>
+        <p>Track the status of your adoption applications.</p>
+    </div>
+</div>
+
+<div class="container">
+
+    {% if applications is defined and applications|length > 0 %}
+
+        {% for application in applications %}
+        <div class="application-card">
+            {% if application.animal.photoFilename is defined and application.animal.photoFilename %}
+                <img src="{{ asset('uploads/' ~ application.animal.photoFilename) }}" alt="{{ application.animal.name }}">
+            {% else %}
+                <img src="https://placehold.co/90x90/eaf7f1/3a9e72?text={{ application.animal.name|first }}" alt="{{ application.animal.name }}">
+            {% endif %}
+
+            <div class="application-info">
+                <h5>{{ application.animal.name }}</h5>
+                <div class="meta">
+                    {{ application.animal.species ? application.animal.species.name : 'Pet' }}
+                    · Submitted {{ application.createdAt|date('M d, Y') }}
+                </div>
+                {% if application.message %}
+                    <p class="message">"{{ application.message|slice(0, 120) }}{% if application.message|length > 120 %}...{% endif %}"</p>
+                {% endif %}
+            </div>
+
+            {% if application.status == 'approved' %}
+                <span class="status-badge status-approved">Approved</span>
+            {% elseif application.status == 'rejected' %}
+                <span class="status-badge status-rejected">Rejected</span>
+            {% else %}
+                <span class="status-badge status-pending">Pending</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-state">
+            <i class="bi bi-clipboard-heart"></i>
+            <h5>No applications yet</h5>
+            <p>You haven't submitted any adoption applications.</p>
+            <a href="{{ path('animal_index') }}" class="btn btn-mint">Browse Pets</a>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
