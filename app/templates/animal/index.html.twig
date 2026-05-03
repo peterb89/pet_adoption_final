@@ -1,55 +1,252 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Available Animals - PetAdopt{% endblock %}
+{% block title %}Adopt a Pet - PetAdopt{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .page-header {
+        background-color: #f8fffe;
+        border-bottom: 1px solid #e0f5ec;
+        padding: 36px 0;
+        margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a1a1a;
+    }
+
+    .page-header p {
+        color: #777;
+        font-size: 0.95rem;
+    }
+
+    .filter-card {
+        background: #fff;
+        border: 1px solid #e0f5ec;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 28px;
+    }
+
+    .filter-card label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #3a9e72;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .filter-card .form-control,
+    .filter-card .form-select {
+        font-size: 0.88rem;
+        border-color: #d0ede0;
+        border-radius: 6px;
+    }
+
+    .filter-card .form-control:focus,
+    .filter-card .form-select:focus {
+        border-color: #6dbf9e;
+        box-shadow: 0 0 0 0.2rem rgba(109,191,158,0.15);
+    }
+
+    .btn-filter {
+        background-color: #6dbf9e;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.88rem;
+        padding: 8px 20px;
+    }
+
+    .btn-filter:hover {
+        background-color: #57aa88;
+        color: #fff;
+    }
+
+    .btn-reset {
+        background: transparent;
+        border: 1.5px solid #ccc;
+        border-radius: 6px;
+        font-size: 0.88rem;
+        padding: 8px 16px;
+        color: #777;
+    }
+
+    .btn-reset:hover {
+        border-color: #999;
+        color: #444;
+    }
+
+    .pet-card {
+        border: 1px solid #eee;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: box-shadow 0.2s, transform 0.2s;
+        background: #fff;
+        height: 100%;
+    }
+
+    .pet-card:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+
+    .pet-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .pet-card-body {
+        padding: 14px;
+    }
+
+    .pet-card-body h6 {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+    }
+
+    .pet-meta {
+        font-size: 0.82rem;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+    .species-pill {
+        display: inline-block;
+        background: #eaf7f1;
+        color: #3a9e72;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 2px 10px;
+        border-radius: 20px;
+        margin-bottom: 8px;
+    }
+
+    .btn-card {
+        font-size: 0.82rem;
+        color: #6dbf9e;
+        border: 1.5px solid #6dbf9e;
+        padding: 4px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-block;
+        background: transparent;
+    }
+
+    .btn-card:hover {
+        background: #6dbf9e;
+        color: #fff;
+    }
+
+    .results-count {
+        font-size: 0.88rem;
+        color: #888;
+        margin-bottom: 16px;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-<section class="page-hero">
+
+<div class="page-header">
     <div class="container">
-        <span class="badge badge-soft mb-3">Adoption center</span>
-        <h1 class="fw-bold mb-2">Available Animals</h1>
-        <p class="text-muted mb-0">Find a pet that matches your home, lifestyle, and adoption goals.</p>
+        <h1>Available Pets</h1>
+        <p>Find your perfect companion and give them a forever home.</p>
     </div>
-</section>
+</div>
 
-<main class="container">
-    <div class="row g-4">
-        {% for animal in animals %}
-            <div class="col-md-6 col-lg-4">
-                <article class="content-card pet-card">
-                    <div class="pet-placeholder">
-                        <i class="bi bi-heart-pulse"></i>
-                    </div>
+<div class="container">
 
-                    <div class="p-4">
-                        <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
-                            <div>
-                                <h2 class="h5 fw-bold mb-1">{{ animal.name }}</h2>
-                                <span class="badge badge-soft">{{ animal.species ? animal.species.name : 'Pet' }}</span>
-                            </div>
-                            <span class="badge text-bg-light border">{{ animal.status|capitalize }}</span>
-                        </div>
+    {# Filter Form #}
+    <div class="filter-card">
+        <form method="GET" action="{{ path('animal_index') }}">
+            <div class="row g-3 align-items-end">
 
-                        <p class="text-muted small mb-3">
-                            {{ animal.breed ?? 'Breed unknown' }} ·
-                            {{ animal.age ? animal.age ~ ' years old' : 'Age unknown' }} ·
-                            {{ animal.location ?? 'Location unknown' }}
-                        </p>
+                <div class="col-md-3">
+                    <label>Search by name</label>
+                    <input type="text" name="search" class="form-control" placeholder="e.g. Buddy" value="{{ search ?? '' }}">
+                </div>
 
-                        <a href="{{ path('animal_detail', { id: animal.id }) }}" class="btn btn-mint w-100">
-                            View details
-                        </a>
-                    </div>
-                </article>
+                <div class="col-md-2">
+                    <label>Species</label>
+                    <select name="species" class="form-select">
+                        <option value="">All species</option>
+                        {% for s in allSpecies %}
+                            <option value="{{ s.id }}" {% if speciesId == s.id %}selected{% endif %}>
+                                {{ s.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label>Size</label>
+                    <select name="size" class="form-select">
+                        <option value="">Any size</option>
+                        <option value="small"  {% if size == 'small'  %}selected{% endif %}>Small</option>
+                        <option value="medium" {% if size == 'medium' %}selected{% endif %}>Medium</option>
+                        <option value="large"  {% if size == 'large'  %}selected{% endif %}>Large</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label>Gender</label>
+                    <select name="gender" class="form-select">
+                        <option value="">Any gender</option>
+                        <option value="male"   {% if gender == 'male'   %}selected{% endif %}>Male</option>
+                        <option value="female" {% if gender == 'female' %}selected{% endif %}>Female</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn-filter">Search</button>
+                    <a href="{{ path('animal_index') }}" class="btn-reset">Reset</a>
+                </div>
+
             </div>
+        </form>
+    </div>
+
+    {# Results count #}
+    <p class="results-count">{{ animals|length }} pet(s) found</p>
+
+    {# Animal Cards #}
+    <div class="row g-3">
+        {% for animal in animals %}
+        <div class="col-md-4 col-lg-3">
+            <div class="pet-card">
+                {% if animal.photoFilename is defined and animal.photoFilename %}
+                    <img src="{{ asset('uploads/' ~ animal.photoFilename) }}" alt="{{ animal.name }}">
+                {% else %}
+                    <img src="https://placehold.co/400x200/eaf7f1/3a9e72?text={{ animal.name }}" alt="{{ animal.name }}">
+                {% endif %}
+                <div class="pet-card-body">
+                    <span class="species-pill">{{ animal.species ? animal.species.name : 'Pet' }}</span>
+                    <h6>{{ animal.name }}</h6>
+                    <div class="pet-meta">
+                        {% if animal.age %}{{ animal.age }} years old{% endif %}
+                        {% if animal.gender %} · {{ animal.gender|capitalize }}{% endif %}
+                        {% if animal.size %} · {{ animal.size|capitalize }}{% endif %}
+                        {% if animal.location %} · {{ animal.location }}{% endif %}
+                    </div>
+                    <a href="{{ path('animal_detail', { id: animal.id }) }}" class="btn-card">View Details</a>
+                </div>
+            </div>
+        </div>
         {% else %}
             <div class="col-12">
-                <div class="content-card p-5 text-center">
-                    <i class="bi bi-search display-5 text-mint"></i>
-                    <h2 class="h4 fw-bold mt-3">No animals found</h2>
-                    <p class="text-muted mb-0">There are no available animals yet.</p>
-                </div>
+                <p class="text-muted">No animals found matching your search.</p>
             </div>
         {% endfor %}
     </div>
-</main>
+
+</div>
+
 {% endblock %}

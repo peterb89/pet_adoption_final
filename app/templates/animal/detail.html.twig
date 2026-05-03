@@ -47,9 +47,15 @@
                     <dd class="col-sm-8">{{ animal.status|capitalize }}</dd>
                 </dl>
 
-                <a href="{{ path('app_profile_edit') }}" class="btn btn-mint px-4">
-                    Prepare adoption profile
-                </a>
+                {% if app.user %}
+                    <a href="{{ path('app_adoption_apply', {id: animal.id}) }}" class="btn btn-mint px-4">
+                        <i class="bi bi-heart"></i> Apply to Adopt
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-mint px-4">
+                        Log in to Apply
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

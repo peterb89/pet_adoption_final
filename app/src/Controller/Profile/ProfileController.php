@@ -21,8 +21,9 @@ class ProfileController extends AbstractController
         AdoptionApplicationRepository $adoptionRepo,
         ProfileCompletenessService $completenessService
     ): Response {
-        $profile = $profileRepository->findOneBy([]);
-        $adoptions = $adoptionRepo->findAll();
+        $user = $this->getUser();
+        $profile = $profileRepository->findOneBy(['user' => $user]);
+        $adoptions = $profile ? $adoptionRepo->findBy(['user' => $user]) : [];
 
         return $this->render('profile/show.html.twig', [
             'profile' => $profile,
@@ -37,13 +38,21 @@ class ProfileController extends AbstractController
         ProfileRepository $profileRepository, 
         EntityManagerInterface $entityManager
     ): Response {
-        $profile = $profileRepository->findOneBy([]);
-        
+        $user = $this->getUser();
+        $profile = $profileRepository->findOneBy(['user' => $user]);
+
+        if (!$profile) {
+            $profile = new Profile();
+            $profile->setUser($user);
+        }
+
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($profile);
             $entityManager->flush();
+
             return $this->redirectToRoute('app_profile_show');
         }
 

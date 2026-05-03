@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adopt {{ animal.name }} - PetAdopt{% endblock %}
+
+{% block body %}
+<section class="page-hero">
+    <div class="container">
+        <a href="{{ path('animal_detail', {id: animal.id}) }}" class="btn btn-outline-mint btn-sm mb-3">
+            <i class="bi bi-arrow-left"></i> Back to {{ animal.name }}
+        </a>
+        <h1 class="fw-bold mb-2">Apply to Adopt {{ animal.name }}</h1>
+        <p class="text-muted mb-0">Fill in the form below to submit your adoption application.</p>
+    </div>
+</section>
+
+<main class="container py-4">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label == 'success' ? 'success' : (label == 'warning' ? 'warning' : 'info') }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="content-card p-4 p-lg-5">
+                <h2 class="h5 fw-semibold mb-4">Your Application for <span class="text-mint">{{ animal.name }}</span></h2>
+
+                <dl class="row mb-4 text-muted small">
+                    <dt class="col-sm-4">Species</dt>
+                    <dd class="col-sm-8">{{ animal.species ? animal.species.name : '—' }}</dd>
+                    <dt class="col-sm-4">Breed</dt>
+                    <dd class="col-sm-8">{{ animal.breed ?? '—' }}</dd>
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">{{ animal.status|capitalize }}</dd>
+                </dl>
+
+                {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+                    <div class="mb-4">
+                        {{ form_label(form.message, null, {label_attr: {class: 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.message, {attr: {class: 'form-control'}}) }}
+                        {{ form_errors(form.message) }}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-mint px-4">
+                            <i class="bi bi-send"></i> Submit Application
+                        </button>
+                        <a href="{{ path('animal_detail', {id: animal.id}) }}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

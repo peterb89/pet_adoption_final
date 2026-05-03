@@ -75,6 +75,10 @@
             color: #fff;
         }
 
+        .logout-form {
+            margin: 0;
+        }
+
         footer {
             background-color: var(--ink);
             color: #aaa;
@@ -106,10 +110,11 @@
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">Pet<span>Adopt</span></a>
+            <a class="navbar-brand" href="{{ path('home') }}">Pet<span>Adopt</span></a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -117,20 +122,38 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Adopt</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('home') }}#adopt">Adopt</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('home') }}#how-it-works">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
                 </ul>
 
-                <div class="d-flex gap-2">
-                    
+                <div class="d-flex gap-2 align-items-center">
                     {% if app.user %}
-                        <a href="{{ path('app_profile_show') }}" class="btn btn-outline-mint btn-sm px-3">Profile</a>
-                        <a href="#" class="btn btn-mint btn-sm px-3">Logout</a>
+                        <a href="{{ path('app_profile_show') }}" class="btn btn-outline-mint btn-sm px-3">
+                            Profile
+                        </a>
+
+                        <form method="post" action="{{ path('app_logout') }}" class="logout-form">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                            <a href="{{ path('app_logout') }}" class="btn btn-mint btn-sm px-3">Logout</a>
+                        </form>
                     {% else %}
-                        <a href="#" class="btn btn-outline-mint btn-sm px-3">Login</a>
-                        <a href="#" class="btn btn-mint btn-sm px-3">Register</a>
+                        <a href="{{ path('app_login') }}" class="btn btn-outline-mint btn-sm px-3">
+                            Login
+                        </a>
+
+                        <a href="{{ path('app_register') }}" class="btn btn-mint btn-sm px-3">
+                            Register
+                        </a>
                     {% endif %}
                 </div>
             </div>
@@ -146,24 +169,31 @@
                     <h6>Pet<span class="text-mint">Adopt</span></h6>
                     <p>We connect pets in need with families ready to adopt responsibly.</p>
                 </div>
+
                 <div class="col-md-4 mb-3">
                     <h6>Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Adopt</a></li>
-                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="{{ path('home') }}">Home</a></li>
+                        <li><a href="{{ path('home') }}#adopt">Adopt</a></li>
+                        <li><a href="{{ path('home') }}#how-it-works">How It Works</a></li>
                     </ul>
                 </div>
+
                 <div class="col-md-4 mb-3">
                     <h6>Contact</h6>
                     <p class="mb-1">Email: contact@petadopt.test</p>
                     <p class="text-muted" style="font-size: 0.8rem;">Support available Monday to Friday.</p>
                 </div>
             </div>
+
             <hr style="border-color: #333;">
-            <p class="text-center mb-0" style="font-size: 0.82rem; color: #666;">© 2026 PetAdopt. All rights reserved.</p>
+
+            <p class="text-center mb-0" style="font-size: 0.82rem; color: #666;">
+                © 2026 PetAdopt. All rights reserved.
+            </p>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

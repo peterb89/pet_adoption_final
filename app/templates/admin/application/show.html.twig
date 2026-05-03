@@ -1,0 +1,131 @@
+{# templates/admin/application/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Application #{{ application.id }} – Admin Review{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+<div style="max-width: 800px;">
+
+    <a href="{{ path('admin_application_index') }}" class="btn btn-outline-secondary mb-3">
+        ← Back to all applications
+    </a>
+
+    <h1 class="mb-4">Application #{{ application.id }}</h1>
+
+    {# ── Status badge ── #}
+    <div class="mb-4">
+        {% if application.status == 'pending' %}
+            <span class="badge bg-warning text-dark fs-6">Pending Review</span>
+        {% elseif application.status == 'approved' %}
+            <span class="badge bg-success fs-6">Approved</span>
+        {% elseif application.status == 'rejected' %}
+            <span class="badge bg-danger fs-6">Rejected</span>
+        {% endif %}
+    </div>
+
+    {# ── Applicant info ── #}
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Applicant</div>
+        <div class="card-body">
+            <p class="mb-1"><strong>Email:</strong> {{ application.user.email }}</p>
+            <p class="mb-1"><strong>Applied on:</strong> {{ application.createdAt|date('d/m/Y H:i') }}</p>
+
+            {% if application.user.profile %}
+                {% set profile = application.user.profile %}
+                <p class="mb-1"><strong>Name:</strong> {{ profile.firstName }} {{ profile.lastName }}</p>
+                {% if profile.phoneNumber %}
+                    <p class="mb-1"><strong>Phone:</strong> {{ profile.phoneNumber }}</p>
+                {% endif %}
+                <p class="mb-1"><strong>City:</strong> {{ profile.city }}</p>
+                <p class="mb-1"><strong>Address:</strong> {{ profile.address }}</p>
+                {% if profile.housingType %}
+                    <p class="mb-0"><strong>Housing type:</strong> {{ profile.housingType.name }}</p>
+                {% endif %}
+            {% else %}
+                <p class="text-muted fst-italic mb-0">No profile linked to this account yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ── Animal info ── #}
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Animal Requested</div>
+        <div class="card-body">
+            <p class="mb-1"><strong>Name:</strong> {{ application.animal.name }}</p>
+            {% if application.animal.species %}
+                <p class="mb-1"><strong>Species:</strong> {{ application.animal.species.name }}</p>
+            {% endif %}
+            {% if application.animal.breed %}
+                <p class="mb-1"><strong>Breed:</strong> {{ application.animal.breed }}</p>
+            {% endif %}
+            {% if application.animal.age %}
+                <p class="mb-1"><strong>Age:</strong> {{ application.animal.age }} year(s)</p>
+            {% endif %}
+            <p class="mb-0">
+                <strong>Current availability:</strong>
+                {% if application.animal.status == 'available' %}
+                    <span class="text-success">Available</span>
+                {% else %}
+                    <span class="text-danger">Not available</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    {# ── Experience ── #}
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Pet Care Experience</div>
+        <div class="card-body">
+            {% if application.experience %}
+                <p class="mb-0">{{ application.experience }}</p>
+            {% else %}
+                <p class="text-muted mb-0">No experience details provided.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ── Motivation / message ── #}
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Motivation / Message</div>
+        <div class="card-body">
+            {% if application.message %}
+                <p class="mb-0">{{ application.message }}</p>
+            {% else %}
+                <p class="text-muted mb-0">No message provided.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ── Approve / Reject actions ── #}
+    {% if application.status == 'pending' %}
+        <div class="d-flex gap-3 mt-3">
+
+            <form method="POST"
+                  action="{{ path('admin_application_change_status', { id: application.id, action: 'approve' }) }}">
+                <input type="hidden" name="_token"
+                       value="{{ csrf_token('change_status_' ~ application.id) }}">
+                <button type="submit" class="btn btn-success btn-lg"
+                        onclick="return confirm('Approve this application?')">
+                    ✓ Approve
+                </button>
+            </form>
+
+            <form method="POST"
+                  action="{{ path('admin_application_change_status', { id: application.id, action: 'reject' }) }}">
+                <input type="hidden" name="_token"
+                       value="{{ csrf_token('change_status_' ~ application.id) }}">
+                <button type="submit" class="btn btn-danger btn-lg"
+                        onclick="return confirm('Reject this application?')">
+                    ✗ Reject
+                </button>
+            </form>
+
+        </div>
+    {% else %}
+        <p class="text-muted mt-3">This application has already been reviewed.</p>
+    {% endif %}
+
+</div>
+</div>
+{% endblock %}

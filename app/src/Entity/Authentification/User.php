@@ -9,9 +9,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -36,15 +38,9 @@ class User
     #[ORM\Column]
     private ?\DateTime $updated_at = null;
 
-    /**
-     * @var Collection<int, AnimalComment>
-     */
     #[ORM\ManyToMany(targetEntity: AnimalComment::class, mappedBy: 'author')]
     private Collection $animalComments;
 
-    /**
-     * @var Collection<int, AdoptionApplication>
-     */
     #[ORM\OneToMany(targetEntity: AdoptionApplication::class, mappedBy: 'user')]
     private Collection $adoptionApplications;
 
@@ -70,6 +66,11 @@ class User
         return $this;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
     public function getPassword(): ?string
     {
         return $this->password;
@@ -81,15 +82,27 @@ class User
         return $this;
     }
 
-    public function getRoles(): ?string
+    public function getRoles(): array
     {
-        return $this->roles;
+        $roles = json_decode($this->roles ?? '[]', true);
+
+        if (!is_array($roles)) {
+            $roles = [];
+        }
+
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
-    public function setRoles(string $roles): static
+    public function setRoles(string|array $roles): static
     {
-        $this->roles = $roles;
+        $this->roles = is_array($roles) ? json_encode($roles) : $roles;
         return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
     }
 
     public function isVerified(): ?bool
@@ -125,9 +138,6 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection<int, AnimalComment>
-     */
     public function getAnimalComments(): Collection
     {
         return $this->animalComments;
@@ -150,9 +160,6 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection<int, AdoptionApplication>
-     */
     public function getAdoptionApplications(): Collection
     {
         return $this->adoptionApplications;

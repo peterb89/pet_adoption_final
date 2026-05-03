@@ -2,7 +2,7 @@
 
 namespace App\Repository\Animals;
 
-use App\Entity\Aniamls\Tag;
+use App\Entity\Animals\Tag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
