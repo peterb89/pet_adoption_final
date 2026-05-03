@@ -10,31 +10,74 @@
     </div>
 </section>
 
-<main class="container" style="max-width: 900px;">
-    {% if profile %}
-        <div class="content-card p-4 p-md-5">
+<main class="container py-5" style="max-width: 900px;">
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+
+            <div class="mb-4">
+                <h2 class="h4 fw-bold mb-1">Profile information</h2>
+                <p class="text-muted mb-0">This data helps us manage your adoption requests.</p>
+            </div>
+
             {{ form_start(form) }}
-                <div class="row g-3">
-                    <div class="col-md-6">{{ form_row(form.firstName) }}</div>
-                    <div class="col-md-6">{{ form_row(form.lastName) }}</div>
-                    <div class="col-md-6">{{ form_row(form.phoneNumber) }}</div>
-                    <div class="col-md-6">{{ form_row(form.city) }}</div>
-                    <div class="col-12">{{ form_row(form.address) }}</div>
-                    <div class="col-12">{{ form_row(form.housingType) }}</div>
-                    <div class="col-12">{{ form_row(form.motivation) }}</div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        {{ form_label(form.firstName, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.firstName, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                        {{ form_errors(form.firstName) }}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ form_label(form.lastName, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.lastName, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                        {{ form_errors(form.lastName) }}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ form_label(form.phoneNumber, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                        {{ form_errors(form.phoneNumber) }}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ form_label(form.city, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.city, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                        {{ form_errors(form.city) }}
+                    </div>
+
+                    <div class="col-12">
+                        {{ form_label(form.address, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.address, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                        {{ form_errors(form.address) }}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ form_label(form.housingType, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.housingType, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                        {{ form_errors(form.housingType) }}
+                    </div>
+
+                    <div class="col-12">
+                        {{ form_label(form.motivation, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.motivation, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+                        {{ form_errors(form.motivation) }}
+                    </div>
                 </div>
 
-                <div class="d-flex gap-2 mt-4">
-                    <button type="submit" class="btn btn-mint px-4">Save changes</button>
-                    <a href="{{ path('app_profile_show') }}" class="btn btn-outline-secondary">Cancel</a>
+                <div class="d-flex flex-column flex-sm-row gap-2 mt-5">
+                    <button type="submit" class="btn btn-mint btn-lg px-4">
+                        Save changes
+                    </button>
+
+                    <a href="{{ path('app_profile_show') }}" class="btn btn-outline-secondary btn-lg px-4">
+                        Cancel
+                    </a>
                 </div>
+
             {{ form_end(form) }}
+
         </div>
-    {% else %}
-        <div class="content-card p-5 text-center">
-            <h2 class="h4 fw-bold">No profile found</h2>
-            <p class="text-muted mb-0">There is no profile available to edit.</p>
-        </div>
-    {% endif %}
+    </div>
 </main>
 {% endblock %}
