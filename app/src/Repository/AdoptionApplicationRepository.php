@@ -16,28 +16,25 @@ class AdoptionApplicationRepository extends ServiceEntityRepository
         parent::__construct($registry, AdoptionApplication::class);
     }
 
-//    /**
-//     * @return AdoptionApplication[] Returns an array of AdoptionApplication objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?AdoptionApplication
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * Returns all applications with their user and animal eagerly loaded,
+     * sorted so pending applications appear first, then by most recent.
+     *
+     * @return AdoptionApplication[]
+     */
+    public function findAllWithDetails(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.user', 'u')
+            ->addSelect('u')
+            ->leftJoin('a.animal', 'an')
+            ->addSelect('an')
+            ->leftJoin('u.profile', 'p')
+            ->addSelect('p')
+            ->leftJoin('p.housingType', 'ht')
+            ->addSelect('ht')
+            ->addOrderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }
