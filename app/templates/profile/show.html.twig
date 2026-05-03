@@ -23,23 +23,28 @@
 
                 <div class="flex-grow-1">
                     <h2 class="fw-bold mb-1">{{ profile.firstName }} {{ profile.lastName }}</h2>
-                    <p class="text-muted mb-3"><i class="bi bi-geo-alt"></i> {{ profile.city }}, {{ profile.address }}</p>
+                    <p class="text-muted mb-3">
+                        <i class="bi bi-geo-alt"></i> {{ profile.city }}, {{ profile.address }}
+                    </p>
                     <a href="{{ path('app_profile_edit') }}" class="btn btn-mint px-4">Edit profile</a>
                 </div>
             </div>
 
             <hr>
 
-            
             <div class="row g-4 mt-2">
                 <div class="col-md-4">
                     <p class="text-muted mb-1">Phone</p>
                     <p class="fw-semibold mb-0">{{ profile.phoneNumber ?? 'Not provided' }}</p>
                 </div>
+
                 <div class="col-md-4">
                     <p class="text-muted mb-1">Housing type</p>
-                    <p class="fw-semibold mb-0">{{ profile.housingType ? profile.housingType.name : 'Not specified' }}</p>
+                    <p class="fw-semibold mb-0">
+                        {{ profile.housingType ? profile.housingType.name : 'Not specified' }}
+                    </p>
                 </div>
+
                 <div class="col-md-12 mt-4">
                     <p class="text-muted mb-1">Motivation</p>
                     <p class="fst-italic" style="color: #555;">
@@ -49,11 +54,11 @@
             </div>
         </div>
 
-        
         <div class="content-card p-4 p-md-5">
             <h3 class="fw-bold mb-4" style="border-bottom: 2px solid var(--mint); padding-bottom: 10px;">
                 My Adoption Applications (Tracking)
             </h3>
+
             <div class="table-responsive">
                 <table class="table table-hover mt-2">
                     <thead class="table-light">
@@ -78,7 +83,9 @@
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="3" class="text-center py-4 text-muted">You haven't applied for any animals yet.</td>
+                                <td colspan="3" class="text-center py-4 text-muted">
+                                    You haven't applied for any animals yet.
+                                </td>
                             </tr>
                         {% endif %}
                     </tbody>
@@ -90,9 +97,16 @@
         
         <div class="content-card p-5 text-center">
             <h2 class="h4 fw-bold">No profile found</h2>
-            <p class="text-muted mb-4">Please create your profile data first to start adopting.</p>
-            <a href="{{ path('admin') }}" class="btn btn-mint">Go to Admin Panel</a>
+            <p class="text-muted mb-4">
+                Please create your profile data first to start adopting.
+            </p>
+
+            <a href="{{ path('app_profile_edit') }}" class="btn btn-mint">
+                Create profile
+            </a>
         </div>
+
     {% endif %}
 </main>
+
 {% endblock %}
