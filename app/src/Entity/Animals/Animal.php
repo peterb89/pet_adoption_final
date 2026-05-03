@@ -32,6 +32,12 @@ class Animal
     #[ORM\Column(length: 50)]
     private ?string $status = 'available';
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $size = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $gender = null;
+
     #[ORM\ManyToOne]
     private ?Species $species = null;
 
@@ -66,7 +72,6 @@ class Animal
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -78,7 +83,6 @@ class Animal
     public function setBreed(?string $breed): static
     {
         $this->breed = $breed;
-
         return $this;
     }
 
@@ -90,7 +94,6 @@ class Animal
     public function setAge(?int $age): static
     {
         $this->age = $age;
-
         return $this;
     }
 
@@ -102,7 +105,6 @@ class Animal
     public function setLocation(?string $location): static
     {
         $this->location = $location;
-
         return $this;
     }
 
@@ -114,7 +116,28 @@ class Animal
     public function setStatus(string $status): static
     {
         $this->status = $status;
+        return $this;
+    }
 
+    public function getSize(): ?string
+    {
+        return $this->size;
+    }
+
+    public function setSize(?string $size): static
+    {
+        $this->size = $size;
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): static
+    {
+        $this->gender = $gender;
         return $this;
     }
 
@@ -126,7 +149,6 @@ class Animal
     public function setSpecies(?Species $species): static
     {
         $this->species = $species;
-
         return $this;
     }
 
@@ -138,28 +160,6 @@ class Animal
         return $this->animalComments;
     }
 
-    public function addAnimalComment(AnimalComment $animalComment): static
-    {
-        if (!$this->animalComments->contains($animalComment)) {
-            $this->animalComments->add($animalComment);
-            $animalComment->setAnimal($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnimalComment(AnimalComment $animalComment): static
-    {
-        if ($this->animalComments->removeElement($animalComment)) {
-            // set the owning side to null (unless already changed)
-            if ($animalComment->getAnimal() === $this) {
-                $animalComment->setAnimal(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, AdoptionApplication>
      */
@@ -168,8 +168,27 @@ class Animal
         return $this->adoptionApplications;
     }
 
+    public function addAnimalComment(AnimalComment $animalComment): static
+    {
+        if (!$this->animalComments->contains($animalComment)) {
+            $this->animalComments->add($animalComment);
+            $animalComment->setAnimal($this);
+        }
+        return $this;
+    }
+
+    public function removeAnimalComment(AnimalComment $animalComment): static
+    {
+        if ($this->animalComments->removeElement($animalComment)) {
+            if ($animalComment->getAnimal() === $this) {
+                $animalComment->setAnimal(null);
+            }
+        }
+        return $this;
+    }
+
     public function __toString(): string
     {
-        return $this->name ?? '';
+        return $this->name ?? 'Unnamed Animal';
     }
 }

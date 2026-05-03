@@ -122,35 +122,32 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('home') }}#adopt">Adopt</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('home') }}#how-it-works">How It Works</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
-                    </li>
+                    
+                    {% if dynamic_nav is defined %}
+                        {% for item in dynamic_nav %}
+                            {% if item.location == 'header' or item.location == 'navbar' %}
+                                <li class="nav-item">
+                                    <a class="nav-link {{ item.cssClass|default('') }}" 
+                                       href="{{ item.url ?: (item.routeName ? path(item.routeName) : '#') }}">
+                                        {{ item.name }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </ul>
 
                 <div class="d-flex gap-2 align-items-center">
+                    
                     {% if app.user %}
                         <a href="{{ path('app_profile_show') }}" class="btn btn-outline-mint btn-sm px-3">
                             Profile
                         </a>
-
-                        <form method="post" action="{{ path('app_logout') }}" class="logout-form">
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
-                            <a href="{{ path('app_logout') }}" class="btn btn-mint btn-sm px-3">Logout</a>
-                        </form>
+                        <a href="{{ path('app_logout') }}" class="btn btn-mint btn-sm px-3">Logout</a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="btn btn-outline-mint btn-sm px-3">
                             Login
                         </a>
-
                         <a href="{{ path('app_register') }}" class="btn btn-mint btn-sm px-3">
                             Register
                         </a>
@@ -173,9 +170,18 @@
                 <div class="col-md-4 mb-3">
                     <h6>Quick Links</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{{ path('home') }}">Home</a></li>
-                        <li><a href="{{ path('home') }}#adopt">Adopt</a></li>
-                        <li><a href="{{ path('home') }}#how-it-works">How It Works</a></li>
+                        
+                        {% if dynamic_nav is defined %}
+                            {% for item in dynamic_nav %}
+                                {% if item.location == 'footer' %}
+                                    <li>
+                                        <a href="{{ item.url ?: (item.routeName ? path(item.routeName) : '#') }}" class="{{ item.cssClass|default('') }}">
+                                            {{ item.name }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
 

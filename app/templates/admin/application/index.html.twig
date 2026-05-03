@@ -1,0 +1,57 @@
+{# templates/admin/application/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin – Adoption Applications{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Adoption Applications</h1>
+        <a href="{{ path('admin') }}" class="btn btn-outline-secondary btn-sm">← Admin Dashboard</a>
+    </div>
+
+    {% if applications is empty %}
+        <div class="alert alert-info">No applications submitted yet.</div>
+    {% else %}
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Applicant</th>
+                    <th>Animal</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                <tr>
+                    <td>{{ application.id }}</td>
+                    <td>{{ application.user.email }}</td>
+                    <td>{{ application.animal.name }}</td>
+                    <td>{{ application.createdAt|date('d/m/Y H:i') }}</td>
+                    <td>
+                        {% if application.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elseif application.status == 'approved' %}
+                            <span class="badge bg-success">Approved</span>
+                        {% elseif application.status == 'rejected' %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ application.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('admin_application_show', { id: application.id }) }}"
+                           class="btn btn-sm btn-outline-primary">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

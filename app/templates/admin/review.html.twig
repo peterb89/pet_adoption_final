@@ -1,0 +1,249 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Application Review - Admin{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .page-header {
+        background-color: #f8fffe;
+        border-bottom: 1px solid #e0f5ec;
+        padding: 36px 0;
+        margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a1a1a;
+    }
+
+    .page-header p {
+        color: #777;
+        font-size: 0.95rem;
+    }
+
+    .review-table {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .review-table table {
+        margin: 0;
+    }
+
+    .review-table th {
+        background: #f8fffe;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #3a9e72;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 14px 16px;
+        border-bottom: 1px solid #e0f5ec;
+    }
+
+    .review-table td {
+        padding: 14px 16px;
+        font-size: 0.92rem;
+        vertical-align: middle;
+    }
+
+    .review-table tr:not(:last-child) td {
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .applicant-name {
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+
+    .applicant-email {
+        font-size: 0.8rem;
+        color: #888;
+    }
+
+    .animal-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .animal-cell img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-pending {
+        background: #fff4d6;
+        color: #b88300;
+    }
+
+    .status-approved {
+        background: #d4f5e3;
+        color: #1f7d4a;
+    }
+
+    .status-rejected {
+        background: #fadcdc;
+        color: #b83232;
+    }
+
+    .btn-approve {
+        background-color: #6dbf9e;
+        color: #fff;
+        border: none;
+        font-size: 0.78rem;
+        padding: 5px 12px;
+        border-radius: 5px;
+    }
+
+    .btn-approve:hover {
+        background-color: #57aa88;
+        color: #fff;
+    }
+
+    .btn-reject {
+        background-color: transparent;
+        color: #b83232;
+        border: 1.5px solid #b83232;
+        font-size: 0.78rem;
+        padding: 4px 12px;
+        border-radius: 5px;
+    }
+
+    .btn-reject:hover {
+        background-color: #b83232;
+        color: #fff;
+    }
+
+    .btn-view {
+        background: transparent;
+        border: 1px solid #ccc;
+        color: #555;
+        font-size: 0.78rem;
+        padding: 4px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .btn-view:hover {
+        background: #f5f5f5;
+        color: #1a1a1a;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8fffe;
+        border-radius: 12px;
+    }
+
+    .empty-state i {
+        font-size: 2.5rem;
+        color: #6dbf9e;
+        margin-bottom: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="container">
+        <h1>Application Review</h1>
+        <p>Review and manage adoption applications.</p>
+    </div>
+</div>
+
+<div class="container">
+
+    {% if applications is defined and applications|length > 0 %}
+
+        <div class="review-table">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Applicant</th>
+                        <th>Animal</th>
+                        <th>Submitted</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for application in applications %}
+                    <tr>
+                        <td>
+                            <div class="applicant-name">
+                                {% if application.user.profile is defined and application.user.profile %}
+                                    {{ application.user.profile.firstName }} {{ application.user.profile.lastName }}
+                                {% else %}
+                                    {{ application.user.email }}
+                                {% endif %}
+                            </div>
+                            <div class="applicant-email">{{ application.user.email }}</div>
+                        </td>
+                        <td>
+                            <div class="animal-cell">
+                                {% if application.animal.photoFilename is defined and application.animal.photoFilename %}
+                                    <img src="{{ asset('uploads/' ~ application.animal.photoFilename) }}" alt="{{ application.animal.name }}">
+                                {% else %}
+                                    <img src="https://placehold.co/40x40/eaf7f1/3a9e72?text={{ application.animal.name|first }}" alt="{{ application.animal.name }}">
+                                {% endif %}
+                                <span>{{ application.animal.name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ application.createdAt|date('M d, Y') }}</td>
+                        <td>
+                            {% if application.status == 'approved' %}
+                                <span class="status-badge status-approved">Approved</span>
+                            {% elseif application.status == 'rejected' %}
+                                <span class="status-badge status-rejected">Rejected</span>
+                            {% else %}
+                                <span class="status-badge status-pending">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            {% if application.status == 'pending' %}
+                                <form method="POST" action="#" style="display:inline;">
+                                    <button type="submit" class="btn-approve" name="action" value="approve">Approve</button>
+                                </form>
+                                <form method="POST" action="#" style="display:inline; margin-left:4px;">
+                                    <button type="submit" class="btn-reject" name="action" value="reject">Reject</button>
+                                </form>
+                            {% else %}
+                                <span class="text-muted" style="font-size: 0.82rem;">No actions</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <h5>No applications to review</h5>
+            <p class="text-muted">There are currently no adoption applications.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
