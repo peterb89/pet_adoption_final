@@ -2,6 +2,7 @@
 
 namespace App\Entity\Animals;
 
+use App\Entity\AdoptionApplication;
 use App\Entity\Animals\AnimalComment;
 use App\Repository\Animals\AnimalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -40,9 +41,16 @@ class Animal
     #[ORM\OneToMany(targetEntity: AnimalComment::class, mappedBy: 'animal')]
     private Collection $animalComments;
 
+    /**
+     * @var Collection<int, AdoptionApplication>
+     */
+    #[ORM\OneToMany(targetEntity: AdoptionApplication::class, mappedBy: 'animal')]
+    private Collection $adoptionApplications;
+
     public function __construct()
     {
         $this->animalComments = new ArrayCollection();
+        $this->adoptionApplications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -150,6 +158,14 @@ class Animal
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, AdoptionApplication>
+     */
+    public function getAdoptionApplications(): Collection
+    {
+        return $this->adoptionApplications;
     }
 
     public function __toString(): string
