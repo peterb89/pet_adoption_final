@@ -4,6 +4,7 @@ namespace App\Controller\Admin\Authentification;
 
 use App\Entity\Authentification\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -21,7 +22,7 @@ class UserCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('email'),
-            TextField::new('roles'),
+            ArrayField::new('roles'),
             TextField::new('password')->setRequired(false),
             BooleanField::new('is_verified'),
             DateTimeField::new('created_at'),
