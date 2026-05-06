@@ -9,16 +9,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
+// Kontrollerek importálása (Hogy a linkTo ismerje őket)
 use App\Controller\Admin\Authentification\UserCrudController;
-
 use App\Controller\Admin\Authentification\Profile\ProfileCrudController;
 use App\Controller\Admin\Authentification\Profile\HousingTypeCrudController;
-
 use App\Controller\Admin\Animals\AnimalCrudController;
 use App\Controller\Admin\Animals\AnimalTagCrudController;
 use App\Controller\Admin\Animals\SpeciesCrudController;
 use App\Controller\Admin\Animals\TagCrudController;
 use App\Controller\Admin\Animals\AnimalCommentCrudController;
+use App\Controller\Admin\Adoption\AdoptionApplicationCrudController;
+use App\Controller\Admin\Navigation\NavigationItemCrudController;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
@@ -26,35 +27,34 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-
-        $url = $adminUrlGenerator
-            ->setController(AnimalCrudController::class)
-            ->generateUrl();
-
-        return $this->redirect($url);
+        return $this->redirect($adminUrlGenerator->setController(AnimalCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard
     {
-        return Dashboard::new()
-            ->setTitle('App');
+        return Dashboard::new()->setTitle('Pet Adoption Platform');
     }
 
     public function configureMenuItems(): iterable
     {
+        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
         yield MenuItem::section('Users');
-        yield MenuItem::linkToRoute('Users', 'fas fa-users', 'admin_user_index');
+        yield MenuItem::linkTo(UserCrudController::class, 'Users', 'fas fa-users');
 
         yield MenuItem::section('Profiles');
-        yield MenuItem::linkToRoute('Profiles', 'fas fa-user', 'admin_profile_index');
-        yield MenuItem::linkToRoute('Housing Types', 'fas fa-home', 'admin_housing_type_index');
+        yield MenuItem::linkTo(ProfileCrudController::class, 'Profiles', 'fas fa-user');
+        yield MenuItem::linkTo(HousingTypeCrudController::class, 'Housing Types', 'fas fa-home');
+        yield MenuItem::linkTo(AdoptionApplicationCrudController::class, 'Adoption Requests', 'fas fa-file-contract');
 
         yield MenuItem::section('Animals');
-        yield MenuItem::linkToRoute('Animals', 'fas fa-paw', 'admin_animal_index');
-        yield MenuItem::linkToRoute('Comments', 'fas fa-comments', 'admin_animal_comment_index');
-        yield MenuItem::linkToRoute('Animal Tags', 'fas fa-tags', 'admin_animal_tag_index');
-        yield MenuItem::linkToRoute('Species', 'fas fa-dna', 'admin_species_index');
-        yield MenuItem::linkToRoute('Tags', 'fas fa-tag', 'admin_tag_index');
+        yield MenuItem::linkTo(AnimalCrudController::class, 'Animals', 'fas fa-paw');
+        yield MenuItem::linkTo(AnimalCommentCrudController::class, 'Comments', 'fas fa-comments');
+        yield MenuItem::linkTo(AnimalTagCrudController::class, 'Animal Tags', 'fas fa-tags');
+        yield MenuItem::linkTo(SpeciesCrudController::class, 'Species', 'fas fa-dna');
+        yield MenuItem::linkTo(TagCrudController::class, 'Tags', 'fas fa-tag');
+
+        yield MenuItem::section('Site Structure');
+        yield MenuItem::linkTo(NavigationItemCrudController::class, 'Navigation Links', 'fas fa-list');
     }
 }
