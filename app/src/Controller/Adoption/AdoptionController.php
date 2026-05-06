@@ -2,6 +2,7 @@
 
 namespace App\Controller\Adoption;
 
+use App\Entity\Authentification\User;
 use App\Entity\AdoptionApplication;
 use App\Entity\Animals\Animal;
 use App\Form\AdoptionApplicationType;
@@ -25,7 +26,12 @@ class AdoptionController extends AbstractController
         AdoptionApplicationRepository $adoptionRepo,
         EntityManagerInterface $entityManager
     ): Response {
+        /** @var User $user */
         $user = $this->getUser();
+        if (!$user->isVerified()) {
+        $this->addFlash('warning', 'You must verify your email before submitting an adoption application.');
+        return $this->redirectToRoute('app_profile_show');
+}
 
         // Profile completeness gate
         $profile = $profileRepository->findOneBy([]);
