@@ -102,6 +102,19 @@
         footer a:hover {
             color: var(--mint);
         }
+        .verify-banner {
+            background: #fff4d6;
+            color: #b88300;
+            padding: 10px 0;
+            font-size: 0.88rem;
+            text-align: center;
+            border-bottom: 1px solid #f5e3a3;
+        }
+        .verify-banner a {
+            color: #8a6300;
+            font-weight: 600;
+            text-decoration: underline;
+        }
     </style>
 
     {% block stylesheets %}{% endblock %}
@@ -112,6 +125,13 @@
 </head>
 
 <body>
+    {% if app.user and app.user.isVerified is defined and not app.user.isVerified %}
+    <div class="verify-banner">
+        <i class="bi bi-exclamation-triangle"></i>
+        Please verify your email address.
+        <a href="#">Resend verification email</a>
+    </div>
+    {% endif %}
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ path('home') }}">Pet<span>Adopt</span></a>
@@ -138,22 +158,18 @@
 
                 <div class="d-flex gap-2 align-items-center">
                     {% if app.user %}
-                        <a href="{{ path('app_profile_show') }}" class="btn btn-outline-mint btn-sm px-3">
-                            Profile
-                        </a>
-
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('admin') }}" class="btn btn-outline-mint btn-sm px-3">Admin</a>
+                        {% endif %}
+                        <a href="#" class="btn btn-outline-mint btn-sm px-3">My Applications</a>
+                        <a href="{{ path('app_profile_show') }}" class="btn btn-outline-mint btn-sm px-3">Profile</a>
                         <form method="post" action="{{ path('app_logout') }}" class="logout-form">
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
                             <a href="{{ path('app_logout') }}" class="btn btn-mint btn-sm px-3">Logout</a>
                         </form>
                     {% else %}
-                        <a href="{{ path('app_login') }}" class="btn btn-outline-mint btn-sm px-3">
-                            Login
-                        </a>
-
-                        <a href="{{ path('app_register') }}" class="btn btn-mint btn-sm px-3">
-                            Register
-                        </a>
+                        <a href="{{ path('app_login') }}" class="btn btn-outline-mint btn-sm px-3">Login</a>
+                        <a href="{{ path('app_register') }}" class="btn btn-mint btn-sm px-3">Register</a>
                     {% endif %}
                 </div>
             </div>
