@@ -23,6 +23,13 @@ class ProfileController extends AbstractController
     ): Response {
         $user = $this->getUser();
         $profile = $profileRepository->findOneBy(['user' => $user]);
+        
+        // --- 1. SECURITY GATE (VOTER) ---
+        // Can only be viewed if the Voter allows it (owner or Admin)
+        if ($profile) {
+            $this->denyAccessUnlessGranted('PROFILE_VIEW', $profile);
+        }
+
         $adoptions = $profile ? $adoptionRepo->findBy(['user' => $user]) : [];
 
         return $this->render('profile/show.html.twig', [
@@ -45,6 +52,10 @@ class ProfileController extends AbstractController
             $profile = new Profile();
             $profile->setUser($user);
         }
+
+        // --- 2. SECURITY GATE (VOTER) ---
+        // You can only edit if the Voter allows it
+        $this->denyAccessUnlessGranted('PROFILE_EDIT', $profile);
 
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
