@@ -23,6 +23,7 @@ class RegistrationFormType extends AbstractType
                     new NotBlank(),
                     new Length(min: 6),
                 ],
+                'label' => 'Password',
             ]);
     }
 
