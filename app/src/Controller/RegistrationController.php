@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Authentification\User;
@@ -18,11 +19,11 @@ class RegistrationController extends AbstractController
 {
     public function __construct(private EmailVerifier $emailVerifier) {}
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
     public function register(
         Request $request,
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $em
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager
     ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('home');
@@ -33,15 +34,25 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($passwordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
-            $user->setRoles([]);
-            $user->setIsVerified(false);
-            $user->setCreatedAt(new \DateTime());
-            $user->setUpdatedAt(new \DateTime());
+            $now = new \DateTime();
 
-            $em->persist($user);
-            $em->flush();
+            // Encode the plain password
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
 
+            $user->setRoles(['ROLE_USER']);
+            $user->setIsVerified(false); 
+            $user->setCreatedAt($now);
+            $user->setUpdatedAt($now);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('no-reply@petadopt.test', 'PetAdopt'))
@@ -51,6 +62,7 @@ class RegistrationController extends AbstractController
             );
 
             $this->addFlash('success', 'Registration successful! Check your email to verify your account.');
+
             return $this->redirectToRoute('app_login');
         }
 

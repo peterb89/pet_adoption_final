@@ -26,7 +26,10 @@ class AnimalCrudController extends AbstractCrudController
             TextField::new('breed'),
             IntegerField::new('age'),
             TextField::new('location'),
-            TextField::new('status'),
+            ChoiceField::new('status')->setChoices([
+                'Available' => 'available',
+                'Not available' => 'not_available',
+            ])->renderAsBadges(false),
             ChoiceField::new('size')->setChoices([
                 'Small'  => 'small',
                 'Medium' => 'medium',

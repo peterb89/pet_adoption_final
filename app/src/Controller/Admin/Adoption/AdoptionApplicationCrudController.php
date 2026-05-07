@@ -6,7 +6,7 @@ use App\Entity\AdoptionApplication;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
@@ -23,7 +23,11 @@ class AdoptionApplicationCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             AssociationField::new('user', 'User / Adopter'),
             AssociationField::new('animal', 'Animal to Adopt'),
-            TextField::new('status'),
+            ChoiceField::new('status')->setChoices([
+                'Pending' => 'pending',
+                'Approved' => 'approved',
+                'Rejected' => 'rejected',
+            ]),
             TextEditorField::new('message'),
             DateTimeField::new('createdAt'),
         ];

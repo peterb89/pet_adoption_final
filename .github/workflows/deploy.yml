@@ -1,0 +1,33 @@
+name: Deploy Pet Adoption
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            cd /root/infra
+
+            if [ ! -d "pet_adoption" ]; then
+              git clone https://github.com/GastonLevy/pet_adoption_final.git pet_adoption
+            fi
+
+            cd /root/infra/pet_adoption
+
+            git pull origin main
+
+            docker compose down
+            docker compose up -d --build
+            docker compose ps
