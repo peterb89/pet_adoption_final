@@ -111,7 +111,7 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center" style="gap: 1rem;">
-                    {# DINAMIKUS MENÜPONTOK (Adatbázisból) #}
+                    
                     {% if dynamic_nav is defined %}
                         {% for item in dynamic_nav %}
                             {% if item.location == 'header' or item.location == 'navbar' %}
