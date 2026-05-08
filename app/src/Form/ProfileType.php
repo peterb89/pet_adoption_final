@@ -6,9 +6,11 @@ use App\Entity\Profile\HousingType;
 use App\Entity\Profile\Profile;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\Image;
 
 class ProfileType extends AbstractType
 {
@@ -30,6 +32,14 @@ class ProfileType extends AbstractType
             ->add('housingType', EntityType::class, [
                 'class' => HousingType::class,
                 'choice_label' => 'name',
+            ])
+            ->add('photo', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Profile picture (optional)',
+                'constraints' => [
+                    new Image(maxSize: '4M'),
+                ],
             ])
         ;
     }

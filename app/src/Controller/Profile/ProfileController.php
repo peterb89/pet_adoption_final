@@ -6,6 +6,7 @@ use App\Entity\Profile\Profile;
 use App\Form\ProfileType;
 use App\Repository\Profile\ProfileRepository;
 use App\Repository\AdoptionApplicationRepository;
+use App\Service\FileUploadService;
 use App\Service\ProfileCompletenessService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,7 +44,8 @@ class ProfileController extends AbstractController
     public function edit(
         Request $request, 
         ProfileRepository $profileRepository, 
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        FileUploadService $fileUploadService
     ): Response {
         $user = $this->getUser();
         $profile = $profileRepository->findOneBy(['user' => $user]);
@@ -61,6 +63,13 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $photoFile = $form->get('photo')->getData();
+
+            if ($photoFile) {
+                $fileUploadService->remove($profile->getPhotoFilename());
+                $profile->setPhotoFilename($fileUploadService->upload($photoFile, 'profiles'));
+            }
+
             $entityManager->persist($profile);
             $entityManager->flush();
 

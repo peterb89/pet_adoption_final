@@ -58,6 +58,12 @@
                         {{ form_errors(form.housingType) }}
                     </div>
 
+                    <div class="col-md-6">
+                        {{ form_label(form.photo, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                        {{ form_widget(form.photo, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                        {{ form_errors(form.photo) }}
+                    </div>
+
                     <div class="col-12">
                         {{ form_label(form.motivation, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
                         {{ form_widget(form.motivation, {'attr': {'class': 'form-control', 'rows': 5}}) }}

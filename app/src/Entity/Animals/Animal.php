@@ -8,6 +8,7 @@ use App\Repository\Animals\AnimalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
 class Animal
@@ -40,6 +41,11 @@ class Animal
 
     #[ORM\ManyToOne]
     private ?Species $species = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photoFilename = null;
+
+    private ?UploadedFile $imageFile = null;
 
     /**
      * @var Collection<int, AnimalComment>
@@ -149,6 +155,30 @@ class Animal
     public function setSpecies(?Species $species): static
     {
         $this->species = $species;
+        return $this;
+    }
+
+    public function getPhotoFilename(): ?string
+    {
+        return $this->photoFilename;
+    }
+
+    public function setPhotoFilename(?string $photoFilename): static
+    {
+        $this->photoFilename = $photoFilename;
+
+        return $this;
+    }
+
+    public function getImageFile(): ?UploadedFile
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?UploadedFile $imageFile): static
+    {
+        $this->imageFile = $imageFile;
+
         return $this;
     }
 

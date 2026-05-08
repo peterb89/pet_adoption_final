@@ -21,6 +21,9 @@ class Profile
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photoFilename = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +91,18 @@ class Profile
         $this->user = $u;
         return $this;
     }
+
+    public function getPhotoFilename(): ?string
+    {
+        return $this->photoFilename;
+    }
+
+    public function setPhotoFilename(?string $photoFilename): self
+    {
+        $this->photoFilename = $photoFilename;
+        return $this;
+    }
+
     public function __toString(): string
     {
         return trim(sprintf('%s %s', $this->firstName ?? '', $this->lastName ?? ''));
