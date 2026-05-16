@@ -23,7 +23,7 @@ class ProfileType extends AbstractType
             ->add('city')
             ->add('address')
             ->add('motivation', TextareaType::class, [
-                'mapped' => false,
+                
                 'attr' => ['rows' => 5, 'placeholder' => 'Tell us why you want to adopt...'],
                 'label' => 'Description / Motivation (optional)',
             ])
