@@ -9,14 +9,34 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
 class Profile
 {
-    #[ORM\Id] #[ORM\GeneratedValue] #[ORM\Column] private ?int $id = null;
-    #[ORM\Column(length: 255)] private ?string $firstName = null;
-    #[ORM\Column(length: 255)] private ?string $lastName = null;
-    #[ORM\Column(length: 20, nullable: true)] private ?string $phoneNumber = null;
-    #[ORM\Column(length: 255)] private ?string $city = null;
-    #[ORM\Column(length: 255)] private ?string $address = null;
-    #[ORM\ManyToOne(inversedBy: 'profiles')] private ?HousingType $housingType = null;
+    #[ORM\Id] 
+    #[ORM\GeneratedValue] 
+    #[ORM\Column] 
+    private ?int $id = null;
 
+    #[ORM\Column(length: 255)] 
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 255)] 
+    private ?string $lastName = null;
+
+    #[ORM\Column(length: 20, nullable: true)] 
+    private ?string $phoneNumber = null;
+
+    #[ORM\Column(length: 255)] 
+    private ?string $city = null;
+
+    #[ORM\Column(length: 255)] 
+    private ?string $address = null;
+
+    #[ORM\ManyToOne(inversedBy: 'profiles')] 
+    private ?HousingType $housingType = null;
+
+    // A motiváció saját jelölése
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $motivation = null;
+
+    // A User kapcsolat saját jelölése
     #[ORM\OneToOne(inversedBy: 'profile')]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
@@ -79,6 +99,15 @@ class Profile
         $this->housingType = $h;
         return $this;
     }
+    public function getMotivation(): ?string
+    {
+        return $this->motivation;
+    }
+    public function setMotivation(?string $m): self
+    {
+        $this->motivation = $m;
+        return $this;
+    }
     public function getUser(): ?User
     {
         return $this->user;
@@ -90,6 +119,8 @@ class Profile
     }
     public function __toString(): string
     {
-        return trim(sprintf('%s %s', $this->firstName ?? '', $this->lastName ?? ''));
+        
+        $fullName = ($this->firstName ?? '') . ' ' . ($this->lastName ?? '');
+        return trim($fullName) ?: 'New Profile';
     }
 }
